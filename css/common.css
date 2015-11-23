@@ -1,0 +1,86 @@
+body{
+    font-family: '微软雅黑';
+}
+p{
+    line-height: 1.8;
+}
+ul li{
+    line-height: 1.8;
+}
+.clearfix:after{
+    content: '';
+    display: block;
+    clear: both;
+}
+.clearfix{
+    *zoom: 1;
+}
+
+
+.jumbotron{
+    background-color: #fff;
+    padding: 30px 0;
+    margin-bottom: 40px;
+    border-bottom: 1px solid #f1f1f1;
+    /*background-color: #f1f1f1*/
+}
+.jumbotron h1{
+    font-size:40px;
+    color: #555;
+    margin-bottom: 20px;
+    /*text-shadow: 0 2px 2px #333;*/
+}
+.jumbotron p{
+    color: #999;
+    font-size:19px;
+    line-height: 2;
+    text-shadow: 0 1px 1px #ccc;
+}
+
+
+.link-container{
+    margin-bottom: 15px;
+    display: table;
+}
+.link-container a {
+    font-size: 16px;
+    color: #999;
+
+    display: block;
+    float: left;
+    margin: 0 20px;
+}
+.link-container .active{
+    color: #333;
+}
+.link-container a:hover{
+    color: #333;
+    text-decoration: none;
+}
+
+.demo-container{
+    -webkit-box-shadow: 3px 3px 20px #ccc;
+    -moz-box-shadow: 3px 3px 20px #ccc;
+    box-shadow: 3px 3px 20px #ccc;
+    margin-bottom: 50px;
+}
+
+.info-container{
+    margin-top: 10px;
+    text-align: left;
+    padding: 0 10px;
+    color: #666;
+    text-shadow: 0 1px 1px #f1f1f1;
+}
+.info-container a{
+    color: #666;
+}
+.info-container .title{
+    font-size: 16px;
+    font-weight: bold;
+}
+
+footer{
+    margin-top: 40px;
+    color: #999;
+}

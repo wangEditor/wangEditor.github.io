@@ -807,31 +807,29 @@ window.___E_mod(function (E, $) {
 		// blur时，隐藏菜单栏
 		// 存储源代码
 		$txt.on('blur', function (e) {
-			
+
 			// -----------兼容 android begin-----------
 			// 在部分安卓浏览器中，点击menucontainer相关的按钮
 			// 会先触发 blur 然后再触发自己的tap
 			// 这里做一步判断
 
-			var explicitOriginalTarget = e.explicitOriginalTarget;
-			if (menuContainer.contains(explicitOriginalTarget) || menuContainerOpenBtn.contains(explicitOriginalTarget)) {
-				// firefox 中，
-				// e.explicitOriginalTarget 包含再菜单容器中，说明
-				// 是由菜单容器的按钮点击触发的该事件
-				e.preventDefault();
-				$txt.focus();
-				return;
-			}
+			// var explicitOriginalTarget = e.explicitOriginalTarget;
+			// if (menuContainer.contains(explicitOriginalTarget) || menuContainerOpenBtn.contains(explicitOriginalTarget)) {
+			// 	// firefox 中，
+			// 	// e.explicitOriginalTarget 包含再菜单容器中，说明
+			// 	// 是由菜单容器的按钮点击触发的该事件
+			// 	e.preventDefault();
+			// 	return;
+			// }
 
-			var relatedTarget = e.relatedTarget;
-			if (relatedTarget != null) {
-				// chrome中
-				// e.relatedTarget != null 说明是
-				// 点击menucontainer相关的按钮触发的，阻止并返回
-				e.preventDefault();
-				$txt.focus();
-				return;
-			}
+			// var relatedTarget = e.relatedTarget;
+			// if (relatedTarget != null) {
+			// 	// chrome中
+			// 	// e.relatedTarget != null 说明是
+			// 	// 点击menucontainer相关的按钮触发的，阻止并返回
+			// 	e.preventDefault();
+			// 	return;
+			// }
 
 			// -----------兼容 android begin-----------
 
@@ -934,7 +932,9 @@ window.___E_mod(function (E, $) {
 		var self = this;
 		var $txt = self.$txt;
 
-		$txt.focus();
+		if (!self.isFocus) {
+			$txt.focus();
+		}
 	};
 
 	// 保存、获取 $txt tap时event对象的target元素
@@ -1110,6 +1110,7 @@ window.___E_mod(function (E, $) {
 		var self = this;
 		var $menuContainer = self.$menuContainer;
 		var $menuContainerOpenBtn = self.$menuContainerOpenBtn;
+		var focusTxtFn = self.focusTxt;
 
 		// 记录状态
 		self.showMenu = true;
@@ -1119,6 +1120,9 @@ window.___E_mod(function (E, $) {
 
 		$menuContainerOpenBtn.hide();
 		$menuContainerOpenBtn.css('opacity', '0');
+
+		// 过 300ms 看是否需要 focus 编辑区域
+		setTimeout(focusTxtFn, 300);
 	};
 
 	// -------------------通过openbtn隐藏菜单-------------------
@@ -1126,12 +1130,16 @@ window.___E_mod(function (E, $) {
 		var self = this;
 		var $menuContainer = self.$menuContainer;
 		var $menuContainerOpenBtn = self.$menuContainerOpenBtn;
+		var focusTxtFn = self.focusTxt;
 		
 		// 记录状态
 		self.showMenu = false;
 		
 		// 直接调用隐藏menucontainer的方法即可
 		self.hideMenuContainer();
+
+		// 过 300ms 看是否需要 focus 编辑区域
+		setTimeout(focusTxtFn, 300);
 	};
 });
 // menus api
@@ -1173,6 +1181,7 @@ window.___E_mod(function (E, $) {
 		var currentRange = self.currentRange();
 		var currentWrapRange = self.currentWrapRange();
 		var $txt = self.$txt;
+		var focusTxtFn = self.focusTxt;
 
 		// 恢复选区（整个外围选区）
 		self.restoreSelection(currentWrapRange);
@@ -1202,6 +1211,9 @@ window.___E_mod(function (E, $) {
 
 		// 隐藏菜单栏
 		self.hideMenuContainer();
+
+		// 过 300ms 看是否需要 focus 编辑区域
+		setTimeout(focusTxtFn, 300);
 	};
 });
 // range selection 的相关操作

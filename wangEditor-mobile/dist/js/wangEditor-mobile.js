@@ -698,7 +698,10 @@ window.___E_mod(function (E, $) {
 	E.fn.bindTxtEvent = function () {
 		var self = this;
 		var $txt = self.$txt;
-		var txt = $txt.get(0);
+		var $menuContainer = self.$menuContainer;
+		var menuContainer = $menuContainer.get(0);
+		var $menuContainerOpenBtn = self.$menuContainerOpenBtn;
+		var menuContainerOpenBtn = $menuContainerOpenBtn.get(0);
 		var srollTime = Date.now();
 
 		// 处理点击 $txt 的选区
@@ -804,17 +807,19 @@ window.___E_mod(function (E, $) {
 		// blur时，隐藏菜单栏
 		// 存储源代码
 		$txt.on('blur', function (e) {
-
+			
 			// -----------兼容 android begin-----------
 			// 在部分安卓浏览器中，点击menucontainer相关的按钮
 			// 会先触发 blur 然后再触发自己的tap
 			// 这里做一步判断
 
 			var explicitOriginalTarget = e.explicitOriginalTarget;
-			if (txt.contains(explicitOriginalTarget)) {
+			if (menuContainer.contains(explicitOriginalTarget) || menuContainerOpenBtn.contains(explicitOriginalTarget)) {
 				// firefox 中，
+				// e.explicitOriginalTarget 包含再菜单容器中，说明
+				// 是由菜单容器的按钮点击触发的该事件
 				e.preventDefault();
-				// $txt.focus();
+				$txt.focus();
 				return;
 			}
 
@@ -824,7 +829,7 @@ window.___E_mod(function (E, $) {
 				// e.relatedTarget != null 说明是
 				// 点击menucontainer相关的按钮触发的，阻止并返回
 				e.preventDefault();
-				// $txt.focus();
+				$txt.focus();
 				return;
 			}
 

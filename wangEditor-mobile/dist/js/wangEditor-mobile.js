@@ -734,11 +734,15 @@ window.___E_mod(function (E, $) {
 			var $target = $(e.target);
 			self.eventTarget($target);
 
-			// 如果当前点击的就是上一次点击的元素，则隐藏菜单栏
 			if ($target.hasClass('focus-elem')) {
-				// 隐藏菜单
+				// 如果当前点击的就是上一次点击的元素，则隐藏菜单栏，返回
 				self.hideMenuContainer();
-				// 返回
+				return;
+			}
+
+			if ($target.hasClass('wangEditor-mobile-txt')) {
+				// 如果当前选中的编辑区域，则隐藏菜单，返回
+				self.hideMenuContainer();
 				return;
 			}
 

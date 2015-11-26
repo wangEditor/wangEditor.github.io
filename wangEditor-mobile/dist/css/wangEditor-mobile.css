@@ -71,6 +71,7 @@
   background-color: #111;
   border: 1px solid #111;
   border-radius: 8px;
+  box-shadow: 2px 2px 5px #999;
   display: box;
   display: -webkit-box;
   display: -moz-box;
@@ -97,14 +98,15 @@
 .wangEditor-mobile-menu-container .close {
   position: absolute;
   z-index: 10000;
-  top: -15px;
-  right: -15px;
+  top: 5px;
+  right: -35px;
   height: 25px;
   width: 25px;
   text-align: center;
   border-radius: 50%;
   border: 1px solid #f1f1f1;
   background-color: #666;
+  box-shadow: 0 0 5px #999;
 }
 .wangEditor-mobile-menu-container-open-btn .close i,
 .wangEditor-mobile-menu-container .close i {

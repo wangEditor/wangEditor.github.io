@@ -193,6 +193,7 @@ window.___E_mod(function (E, $) {
 
 		// ------------- menus container  
 		var $menuContainer = $('<div class="wangEditor-mobile-menu-container"></div>');
+		var $menuItemContainer = $('<div class="item-container"></div>');
 		var $menuContainerTip = $('<div class="tip"></div>');  // 三角形
 		var $menuCloseContainer = $('<div class="close"></div>');
 		var $menuClose = $('<a href="#"></a>');
@@ -203,14 +204,20 @@ window.___E_mod(function (E, $) {
 		// 增加关闭按钮
 		$menuClose.append($('<i class="icon-wangEditor-m-close"></i>'));
 		$menuCloseContainer.append($menuClose);
+		$menuContainer.append($menuItemContainer);
+
+		// 菜单项的容器
 		$menuContainer.append($menuCloseContainer);
 
 		// -------- menus container 打开按钮
-		var $menuContainerOpenBtn = $('<div class="wangEditor-mobile-menu-container-open-btn"><div class="item"><a href="#"><i class="icon-wangEditor-m-ellipsis-h"></i></a></div></div>');
+		var $menuContainerOpenBtn = $('<div class="wangEditor-mobile-menu-container-open-btn"></div>');
+		var $menuContainerOpenBtnItemContaier = $('<div class="item-container"> <div class="item"><a href="#"><i class="icon-wangEditor-m-ellipsis-h"></i></a></div> </div>');
+		$menuContainerOpenBtn.append($menuContainerOpenBtnItemContaier);
 		$menuContainerOpenBtn.append($menuContainerTip.clone());
 
 		// 添加到数据对象
 		self.$menuContainer = $menuContainer;
+		self.$menuItemContainer = $menuItemContainer;
 		self.$menuContainerOpenBtn = $menuContainerOpenBtn;
 		self.$menuClose = $menuClose;
 
@@ -601,6 +608,7 @@ window.___E_mod(function (E, $) {
 		var self = this;
 		var menus = self.menus;
 		var $menuContainer = self.$menuContainer;
+		var $menuItemContainer = self.$menuItemContainer;
 		var $menuContainerOpenBtn = self.$menuContainerOpenBtn;
 		var $txt = self.$txt;
 		var $gap = $('<div class="gap"></div>');
@@ -623,19 +631,19 @@ window.___E_mod(function (E, $) {
 				// 渲染菜单
 				if ($wrap) {
 					$wrap.append($trigger);
-					$menuContainer.append($wrap);
+					$menuItemContainer.append($wrap);
 				} else {
-					$menuContainer.append($trigger);
+					$menuItemContainer.append($trigger);
 				}
 				
 				// 菜单之间的间隙
 				// 之所以需要加 clone 是因为 append 由一种『单例移动』的特性！！需注意！！
-				$menuContainer.append($gap.clone());
+				$menuItemContainer.append($gap.clone());
 			}
 		});
 
 		// 删除最后一个间隙（即最后一个子元素）
-		$menuContainer.children().last().remove();
+		$menuItemContainer.children().last().remove();
 
 		// 默认隐藏
 		$menuContainer.hide();

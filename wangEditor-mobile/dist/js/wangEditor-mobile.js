@@ -808,6 +808,9 @@ window.___E_mod(function (E, $) {
 		// 存储源代码
 		$txt.on('blur', function (e) {
 
+			// 记录编辑区域已经 blur
+			self.isFocus = false;
+
 			// -----------兼容 android begin-----------
 			// 在部分安卓浏览器中，点击menucontainer相关的按钮
 			// 会先触发 blur 然后再触发自己的tap
@@ -820,7 +823,7 @@ window.___E_mod(function (E, $) {
 				// firefox 中，
 				// e.explicitOriginalTarget 包含再菜单容器中，说明
 				// 是由菜单容器的按钮点击触发的该事件
-				setTimeout(focusTxtFn, 300);
+				setTimeout(focusTxtFn.call(self), 300);
 				e.preventDefault();
 				return;
 			}
@@ -836,9 +839,6 @@ window.___E_mod(function (E, $) {
 			}
 
 			// -----------兼容 android begin-----------
-
-			// 记录编辑区域已经 blur
-			self.isFocus = false;
 
 			// 存储源码代码
 			self.saveSourceCode();

@@ -698,6 +698,7 @@ window.___E_mod(function (E, $) {
 	E.fn.bindTxtEvent = function () {
 		var self = this;
 		var $txt = self.$txt;
+		var txt = $txt.get(0);
 		var srollTime = Date.now();
 
 		// 处理点击 $txt 的选区
@@ -809,11 +810,21 @@ window.___E_mod(function (E, $) {
 			// 会先触发 blur 然后再触发自己的tap
 			// 这里做一步判断
 
-			if (e.relatedTarget != null) {
+			var explicitOriginalTarget = e.explicitOriginalTarget;
+			if (txt.contains(explicitOriginalTarget)) {
+				// firefox 中，
+				e.preventDefault();
+				// $txt.focus();
+				return;
+			}
+
+			var relatedTarget = e.relatedTarget;
+			if (relatedTarget != null) {
+				// chrome中
 				// e.relatedTarget != null 说明是
 				// 点击menucontainer相关的按钮触发的，阻止并返回
 				e.preventDefault();
-				$txt.focus();
+				// $txt.focus();
 				return;
 			}
 

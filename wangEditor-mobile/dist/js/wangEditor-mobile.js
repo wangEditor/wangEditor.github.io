@@ -830,7 +830,7 @@ window.___E_mod(function (E, $) {
 				// chrome中
 				// e.relatedTarget != null 说明是
 				// 点击menucontainer相关的按钮触发的，阻止并返回
-				setTimeout(focusTxtFn, 300);
+				setTimeout(focusTxtFn.call(self), 300);
 				e.preventDefault();
 				return;
 			}

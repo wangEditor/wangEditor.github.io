@@ -150,7 +150,32 @@ window.___E_mod(function (E, $) {
 				'color',
 				'quote',
 				'list',
+				'happy',
 				'check'
+			],
+
+			// 表情图标配置
+			happy: [
+				'http://wangeditor.github.io/expressions/1.gif',
+				'http://wangeditor.github.io/expressions/2.gif',
+				'http://wangeditor.github.io/expressions/3.gif',
+				'http://wangeditor.github.io/expressions/4.gif',
+				'http://wangeditor.github.io/expressions/5.gif',
+				'http://wangeditor.github.io/expressions/6.gif',
+				'http://wangeditor.github.io/expressions/7.gif',
+				'http://wangeditor.github.io/expressions/8.gif',
+				'http://wangeditor.github.io/expressions/9.gif',
+				'http://wangeditor.github.io/expressions/10.gif',
+				'http://wangeditor.github.io/expressions/11.gif',
+				'http://wangeditor.github.io/expressions/12.gif',
+				'http://wangeditor.github.io/expressions/13.gif',
+				'http://wangeditor.github.io/expressions/14.gif',
+				'http://wangeditor.github.io/expressions/15.gif',
+				'http://wangeditor.github.io/expressions/16.gif',
+				'http://wangeditor.github.io/expressions/17.gif',
+				'http://wangeditor.github.io/expressions/18.gif',
+				'http://wangeditor.github.io/expressions/19.gif',
+				'http://wangeditor.github.io/expressions/20.gif'
 			]
 		};
 		
@@ -189,7 +214,6 @@ window.___E_mod(function (E, $) {
 
 	E.fn.addMenus = function () {
 		var self = this;
-		var menus;
 
 		// ------------- menus container  
 		var $menuContainer = $('<div class="wangEditor-mobile-menu-container"></div>');
@@ -222,15 +246,14 @@ window.___E_mod(function (E, $) {
 		self.$menuClose = $menuClose;
 
 		// ------------- menus 数据集合 ------------- 
-		self.menus = {};
-		menus = self.menus;
-
+		self.menus = {};		
 		self.addMenuBold('bold');
 		self.addMenuHead('head');
 		self.addMenuColor('color');
 		self.addMenuQuote('quote');
 		self.addMenuList('list');
 		self.addMenuCheck('check');
+		self.addMenuHappy('happy');
 	};
 
 });
@@ -286,7 +309,7 @@ window.___E_mod(function (E, $) {
 
 	E.fn.addMenuHead = function (menuId) {
 		var self = this;
-		var menus = self.menus || {};
+		var menus = self.menus;
 
 		menus[menuId] = {
 			// 是否处于选中状态
@@ -337,7 +360,7 @@ window.___E_mod(function (E, $) {
 
 	E.fn.addMenuColor = function (menuId) {
 		var self = this;
-		var menus = self.menus || {};
+		var menus = self.menus;
 		var configColor = self.config.menuColorValue;
 
 		menus[menuId] = {
@@ -390,7 +413,7 @@ window.___E_mod(function (E, $) {
 
 	E.fn.addMenuQuote = function (menuId) {
 		var self = this;
-		var menus = self.menus || {};
+		var menus = self.menus;
 		var $txt = self.$txt;
 		var configQuoteStyle = self.config.menuQuoteStyle;
 
@@ -429,7 +452,7 @@ window.___E_mod(function (E, $) {
 						};
 
 						// 执行盖自定义事件
-						self.customCommand(commandFn, e);
+						self.customCommand(false, commandFn, e);
 
 					} else {
 						// 当前不是quote状态
@@ -479,7 +502,7 @@ window.___E_mod(function (E, $) {
 
 	E.fn.addMenuList = function (menuId) {
 		var self = this;
-		var menus = self.menus || {};
+		var menus = self.menus;
 
 		menus[menuId] = {
 			// 是否处于选中状态
@@ -525,7 +548,7 @@ window.___E_mod(function (E, $) {
 
 	E.fn.addMenuCheck = function (menuId) {
 		var self = this;
-		var menus = self.menus || {};
+		var menus = self.menus;
 
 		menus[menuId] = {
 			// 是否处于选中状态
@@ -572,7 +595,7 @@ window.___E_mod(function (E, $) {
 					var fn = function () {
 						self.$focusElem.after($content);
 					};
-					self.customCommand(fn, e);
+					self.customCommand(false, fn, e);
 				});
 			},
 
@@ -581,6 +604,129 @@ window.___E_mod(function (E, $) {
 				// 暂时不需要
 			}
 		};
+	};
+
+});
+// 表情菜单
+window.___E_mod(function (E, $) {
+
+	E.fn.addMenuHappy = function (menuId) {
+		var self = this;
+		var $body = self.$body;
+		var menus = self.menus;
+		var happyUrlArr = self.config.happy;
+		var $txt = self.$txt;
+
+		menus[menuId] = {
+			// 选中状态
+			selected: false,
+
+			// 触发器
+			$trigger: $('<a href="#"><i class="icon-wangEditor-m-happy"></i></a>'),
+			// 包裹触发器的容器
+			$wrap: $('<div class="item"</div>'),
+
+			// $modal 
+			$modal: $('<div class="wangEditor-mobile-modal"></div>'),
+
+			// 渲染 $modal
+			renderModal: function () {
+				var menuData = this;
+				var $modal = menuData.$modal;
+				var itemTpl = '<a href="#" class="command-link" commandValue="#{imgUrl}"><img src="#{imgUrl}"/></a>';
+				var contentHtmlArr = [];
+
+				// 拼接数据
+				$.each(happyUrlArr, function (key, value) {
+					contentHtmlArr.push(
+						itemTpl.replace(/#{imgUrl}/ig, value)
+					);
+				});
+				$modal.append(contentHtmlArr.join(''));
+
+				// 渲染到页面中
+				$body.append($modal);
+
+				// 定位
+				var width = $modal.width();
+				$modal.css('margin-left', (0 - width)/2);
+
+				// 绑定表情图标的事件
+				$modal.on('singleTap', '.command-link', function (e) {
+					if (self.checkTapTime() === false) {
+						return;
+					}
+
+					var $commandLink = $(e.currentTarget);
+					var commandValue = $commandLink.attr('commandValue');
+
+					// 执行命令
+					self.command('InsertImage', false, commandValue, e);
+
+					// 隐藏 modal
+					menuData.hideModal();
+				});
+
+				// 点击编辑区域隐藏modal
+				$txt.on('singleTap', function (e) {
+					if (self.checkTapTime() === false) {
+						return;
+					}
+					menuData.hideModal();
+				});
+			},
+
+			// 显示、隐藏 $modal
+			showModal: function () {
+				this.$modal.show();
+			},
+			hideModal: function () {
+				this.$modal.hide();
+			},
+
+			// 绑定事件
+			bindEvent: function (editor) {
+				var menuData = this;
+				var $trigger = menuData.$trigger;
+				var $modal = menuData.$modal;
+
+				function commandFnForOneEvent() {
+					menuData.renderModal();
+					menuData.showModal();
+				}
+
+				function commandFnForOnEvent() {
+					menuData.showModal();
+				}
+
+				// one绑定的方法只执行一次
+				// 用于渲染 modal 元素并显示
+				$trigger.one('singleTap', function (e) {
+					if (self.checkTapTime() === false) {
+						return;
+					}
+
+					// 渲染modal并显示
+					self.customCommand(true, commandFnForOneEvent, e);
+				});
+
+				// on 绑定的方法每次都执行
+				// 用于每次显示和隐藏modal
+				$trigger.on('singleTap', function (e) {
+					if (self.checkTapTime() === false) {
+						return;
+					}
+
+					// 显示modal
+					self.customCommand(true, commandFnForOnEvent, e);
+				});
+			},
+
+			// 更新样式
+			updateStyle: function () {
+				// 暂时不需要
+			}
+		};	
 	};
 
 });
@@ -1159,27 +1305,38 @@ window.___E_mod(function (E, $) {
 // 编辑器的命令事件
 window.___E_mod(function (E, $) {
 
+	// 符合这个正则表达式的命令，恢复选区时，不要恢复外围选区（如插入图片）
+	var regRestoreNoWrapSelection = /insertimage/i;
+
 	// 传统事件
 	E.fn.command = function (commandName, bool, commandValue, e, callback) {
 		var self = this;
-		
+
+		// 验证该命令是否不能恢复外围选区，将传入到 customCommand 中
+		var regResult = regRestoreNoWrapSelection.test(commandName);
+
 		var fn = function () {
 			document.execCommand(commandName, !!bool, commandValue);
 		};
 
 		// 执行事件
-		self.customCommand(fn, e, callback);
+		self.customCommand(regResult, fn, e, callback);
 	};
 
 	// 自定义事件
-	E.fn.customCommand = function (fn, e, callback) {
+	E.fn.customCommand = function (isRestoreNoWrapSelection, fn, e, callback) {
 		var self = this;
 		var currentRange = self.currentRange();
 		var currentWrapRange = self.currentWrapRange();
 		var $txt = self.$txt;
 
-		// 恢复选区（整个外围选区）
-		self.restoreSelection(currentWrapRange);
+		if (isRestoreNoWrapSelection) {
+			// 恢复选区（非整个外围选区）
+			self.restoreSelection(currentRange);
+		} else {
+			// 恢复选区（整个外围选区）
+			self.restoreSelection(currentWrapRange);
+		}
 
 		// 执行命令
 		fn();

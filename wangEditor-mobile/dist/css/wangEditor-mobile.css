@@ -107,7 +107,7 @@
   text-decoration: none;
   color: #f1f1f1;
   display: inline-block;
-  padding: 6px 5px;
+  padding: 2px 0 0 0;
 }
 .wangEditor-mobile-menu-container-open-btn .item-container,
 .wangEditor-mobile-menu-container .item-container {

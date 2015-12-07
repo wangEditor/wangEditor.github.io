@@ -158,7 +158,7 @@ window.___E_mod(function (E, $) {
 
 		self.config = {
 			
-			// 菜单栏中的 color 按钮点击时的颜色值
+			// 菜单栏中的 color 按钮点击时的颜色值（即css中的颜色值）
 			menuColorValue: 'red',
 
 			// 菜单栏中的 quote 按钮点击时的样式
@@ -210,7 +210,10 @@ window.___E_mod(function (E, $) {
 			uploadImgUrl: '/upload',
 
 			// 测试地址（在测试地址，编辑器会主动输出一些console.log信息）
-			testHostname: 'localhost'
+			testHostname: 'localhost',
+
+			// 通过 openBtn 打开菜单之后，N次不执行command就自动隐藏
+			tapNumForHideMenu: 3
 		};
 		
 	};
@@ -253,19 +256,19 @@ window.___E_mod(function (E, $) {
 		var $menuContainer = $('<div class="wangEditor-mobile-menu-container" contentEditable="false"></div>');
 		var $menuItemContainer = $('<div class="item-container"></div>');
 		var $menuContainerTip = $('<div class="tip"></div>');  // 三角形
-		var $menuCloseContainer = $('<div class="close"></div>');
-		var $menuClose = $('<a href="#"></a>');
+		// var $menuCloseContainer = $('<div class="close"></div>');
+		// var $menuClose = $('<a href="#"></a>');
 
 		// 增加小三角 tip
 		$menuContainer.append($menuContainerTip);
 
 		// 增加关闭按钮
-		$menuClose.append($('<i class="icon-wangEditor-m-close"></i>'));
-		$menuCloseContainer.append($menuClose);
-		$menuContainer.append($menuItemContainer);
+		// $menuClose.append($('<i class="icon-wangEditor-m-close"></i>'));
+		// $menuCloseContainer.append($menuClose);
+		// $menuContainer.append($menuCloseContainer);
 
 		// 菜单项的容器
-		$menuContainer.append($menuCloseContainer);
+		$menuContainer.append($menuItemContainer);
 
 		// -------- menus container 打开按钮
 		var $menuContainerOpenBtn = $('<div class="wangEditor-mobile-menu-container-open-btn"  contentEditable="false"></div>');
@@ -277,7 +280,7 @@ window.___E_mod(function (E, $) {
 		self.$menuContainer = $menuContainer;
 		self.$menuItemContainer = $menuItemContainer;
 		self.$menuContainerOpenBtn = $menuContainerOpenBtn;
-		self.$menuClose = $menuClose;
+		// self.$menuClose = $menuClose;
 
 		// ------------- menus 数据集合 ------------- 
 		self.menus = {};		
@@ -365,9 +368,9 @@ window.___E_mod(function (E, $) {
 
 					// 执行命令
 					if (menuData.selected) {
-						self.command('formatblock', false, 'p');
+						self.command('formatblock', false, 'p', e);
 					} else {
-						self.command('formatblock', false, 'h3');
+						self.command('formatblock', false, 'h3', e);
 					}
 				});
 			},
@@ -1112,6 +1115,9 @@ window.___E_mod(function (E, $) {
 				return;
 			}
 
+			// 计算点击次数（N次不command即隐藏菜单为 openBtn 形式）
+			self.setTapNumForHideMenu('tap');
+
 			// 根据点击的位置，对菜单栏进行定位
 			self.setMenuContainerPosition();
 
@@ -1228,18 +1234,20 @@ window.___E_mod(function (E, $) {
 		});
 
 		// 绑定 menucontainer 右上角的关闭按钮事件
-		$menuClose.on('singleTap', function (e) {
-			if (self.checkTapTime(e, '$menuClose') === false) {
-				return;
-			}
+		if ($menuClose != null) {
+			$menuClose.on('singleTap', function (e) {
+				if (self.checkTapTime(e, '$menuClose') === false) {
+					return;
+				}
 
-			// 显示菜单（下次显示openBtn）
-			self.hideMenuByOpenBtn();
+				// 显示菜单（下次显示openBtn）
+				self.hideMenuByOpenBtn();
 
-			// 阻止冒泡
-			e.preventDefault();
-			e.stopPropagation();
-		});
+				// 阻止冒泡
+				e.preventDefault();
+				e.stopPropagation();
+			});
+		}
 	};
 
 	// ----------------- 绑定 menucontainer openbtn 的事件
@@ -1342,6 +1350,32 @@ window.___E_mod(function (E, $) {
 		}
 	};
 
+	// 记录编辑器的点击次数
+	E.fn.setTapNumForHideMenu = function (type) {
+		// type: 'tap' / 'command'
+		
+		var self = this;
+		var currentNum = self.tapNumForHideMenu;
+		var configNum = self.config.tapNumForHideMenu;
+
+		if (currentNum == null) {
+			return;
+		}
+		// self.tapNumForHideMenu 将再 openBtn 显示菜单时，赋值为 0
+		
+		if (type === 'tap') {
+			self.tapNumForHideMenu = currentNum + 1;
+
+			if (currentNum >= configNum) {
+				// 超出了界限，就执行 openBtn 隐藏菜单，取消计数
+				// 此时将 self.tapNumForHideMenu 的值赋值为 null
+				self.hideMenuByOpenBtn();
+			}
+		} else if (type === 'command') {
+			self.tapNumForHideMenu = currentNum - 1;
+		}
+	};
+
 });
 // menucontainer api
 window.___E_mod(function (E, $) {
@@ -1399,7 +1433,7 @@ window.___E_mod(function (E, $) {
 		}
 
 		// 其他样式的结果值
-		var left = txtLeft + 3;
+		var left = txtLeft + 1;
 		var marginTop = 20;
 		var style = {
 			'top': top + 'px',
@@ -1480,6 +1514,9 @@ window.___E_mod(function (E, $) {
 
 		$menuContainerOpenBtn.hide();
 		$menuContainerOpenBtn.css('opacity', '0');
+
+		// 开始点击次数的记录
+		self.tapNumForHideMenu = 0;
 	};
 
 	// -------------------通过openbtn隐藏菜单-------------------
@@ -1493,6 +1530,9 @@ window.___E_mod(function (E, $) {
 		
 		// 直接调用隐藏menucontainer的方法即可
 		self.hideMenuContainer();
+
+		// 取消点击次数的记录
+		self.tapNumForHideMenu = null;
 	};
 });
 // menus api
@@ -1583,6 +1623,9 @@ window.___E_mod(function (E, $) {
 
 		// 隐藏菜单栏
 		self.hideMenuContainer();
+
+		// 计算点击次数（N次不command即隐藏菜单为 openBtn 形式）
+		self.setTapNumForHideMenu('command');
 	};
 });
 // range selection 的相关操作

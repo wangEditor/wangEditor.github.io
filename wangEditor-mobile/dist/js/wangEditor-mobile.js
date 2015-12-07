@@ -250,7 +250,7 @@ window.___E_mod(function (E, $) {
 		var self = this;
 
 		// ------------- menus container  
-		var $menuContainer = $('<div class="wangEditor-mobile-menu-container"></div>');
+		var $menuContainer = $('<div class="wangEditor-mobile-menu-container" contentEditable="false"></div>');
 		var $menuItemContainer = $('<div class="item-container"></div>');
 		var $menuContainerTip = $('<div class="tip"></div>');  // 三角形
 		var $menuCloseContainer = $('<div class="close"></div>');
@@ -268,7 +268,7 @@ window.___E_mod(function (E, $) {
 		$menuContainer.append($menuCloseContainer);
 
 		// -------- menus container 打开按钮
-		var $menuContainerOpenBtn = $('<div class="wangEditor-mobile-menu-container-open-btn"></div>');
+		var $menuContainerOpenBtn = $('<div class="wangEditor-mobile-menu-container-open-btn"  contentEditable="false"></div>');
 		var $menuContainerOpenBtnItemContaier = $('<div class="item-container"> <div class="item"><a href="#"><i class="icon-wangEditor-m-ellipsis-h"></i></a></div> </div>');
 		$menuContainerOpenBtn.append($menuContainerOpenBtnItemContaier);
 		$menuContainerOpenBtn.append($menuContainerTip.clone());

@@ -579,8 +579,9 @@ window.___E_mod(function (E, $) {
 						return;
 					}
 
-					// 执行命令
+					// 当前不是 list 状态，直接执行
 					self.command('InsertUnorderedList', false, undefined, e);
+					
 				});
 			},
 

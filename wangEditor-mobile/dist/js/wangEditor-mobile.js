@@ -928,6 +928,11 @@ window.___E_mod(function (E, $) {
 			            		xhr.abort();
 			            	}
 			            	alert('上传超时，请重试');
+
+			            	if (location.hostname.toLowerCase() === 'wangeditor.github.io') {
+			            		// 官网demo的特殊提示
+			            		alert('提示：wangEditor官网demo没有后台服务，因此超时（该alert在实际项目中不会出现）');
+			            	}
 			            }
 
 			            log('准备上传文件...');

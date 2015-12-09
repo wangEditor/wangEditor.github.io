@@ -20,9 +20,10 @@
 			var $input1 = $('#input1');
 
 			$('#link1').on('click', function (e) {
+				$input1.trigger('click');
 				e.preventDefault();
 
-				$input1.trigger('click');
+
 			});
 			$('#link1').on('singleTap', function (e) {
 				$input1.trigger('click');

@@ -895,7 +895,10 @@ window.___E_mod(function (E, $) {
 
 				// input 有文件选中时，显示预览图，提交 form
 				$inputFlie.on('change', function (e) {
-					var files = $inputFlie[0].files;
+					var files = $inputFlie[0].files || [];
+					if (files.length === 0) {
+						return;
+					}
 					var file = files[0];
 					var fileType = file.type || '';
 					var reader = new FileReader();
@@ -1002,13 +1005,16 @@ window.___E_mod(function (E, $) {
 				});
 
 				// 点击菜单，触发 input 事件
-				var triggerInputFnTriggered = false;
-				function triggerInputFn (e) {
-					if (triggerInputFnTriggered) {
-						e.preventDefault();
+				var triggerEventType = 'singleTap';
+				if (agent.indexOf('QQ') > 0) {
+					// QQ浏览器，QQ内置浏览器。使用 click
+					triggerEventType = 'click';
+				}
+				$trigger.on(triggerEventType, function (e) {
+					if (self.checkTapTime(e, 'img') === false) {
 						return;
 					}
-
+					
 					// 判断改浏览器是否支持 FormData 和 fileReader
 					if (!window.FileReader || !window.FormData) {
 						alert('当前浏览器不支持html5中的 FileReader 和 FormData，无法上传图片');
@@ -1030,18 +1036,6 @@ window.___E_mod(function (E, $) {
 					}
 
 					self.customCommand(true, fn, e);
-
-					triggerInputFnTriggered = true;
-				}
-				$trigger.on('singleTap', function (e) {
-					if (self.checkTapTime(e, 'img') === false) {
-						return;
-					}
-
-					triggerInputFn(e);
-				});
-				$trigger.on('click', function (e) {
-					triggerInputFn(e);
 				});
 			},
 

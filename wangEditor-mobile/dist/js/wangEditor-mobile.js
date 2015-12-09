@@ -1017,6 +1017,7 @@ window.___E_mod(function (E, $) {
 				});
 
 				// 点击菜单，触发 input 事件
+				alert(agent);
 				var triggerEventType = 'singleTap';
 				var otherTriggerEventType = 'click';
 				if (agent.indexOf('QQ') > 0) {

@@ -144,6 +144,11 @@
 	window.___E = E;
 
 })(window, window.Zepto);
+// 自定义alert
+window.___E_mod(function (E, $) {
+
+
+});
 // 初始化静态配置文件
 window.___E_mod(function (E, $) {
 
@@ -744,9 +749,16 @@ window.___E_mod(function (E, $) {
 			// 显示 $modal
 			showModal: function () {
 				var menuData = this;
+				var $modal = menuData.$modal;
+				var scrollTop = $body.get(0).scrollTop;
 
 				// 显示 modal
-				menuData.$modal.show();
+				$modal.show();
+
+				// 确定 modal 位置
+				$modal.css({
+					'margin-top': (scrollTop + 50) + 'px'
+				});
 
 				// 点击编辑区域隐藏modal
 				var hideModalFn = function (e) {
@@ -1311,11 +1323,11 @@ window.___E_mod(function (E, $) {
 			}
 		});
 
-		// 阻止 click 事件，防止 tap 点透
-		$txt.on('click', function (e) {
-			e.preventDefault();
-			e.stopPropagation();
-		});
+		// // 阻止 click 事件，防止 tap 点透
+		// $txt.on('click', function (e) {
+		// 	e.preventDefault();
+		// 	e.stopPropagation();
+		// });
 	};
 
 });

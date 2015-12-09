@@ -1028,11 +1028,15 @@ window.___E_mod(function (E, $) {
 					// 阻止另一个事件类型的默认行文
 					e.preventDefault();
 				});
+				alert(triggerEventType);
 				$trigger.on(triggerEventType, function (e) {
-					if (self.checkTapTime(e, 'img') === false) {
-						return;
+					if (triggerEventType !== 'click') {
+						// singleTap需要验证
+						if (self.checkTapTime(e, 'img') === false) {
+							return;
+						}
 					}
-					
+					alert('event');
 					// 判断改浏览器是否支持 FormData 和 fileReader
 					if (!window.FileReader || !window.FormData) {
 						alert('当前浏览器不支持html5中的 FileReader 和 FormData，无法上传图片');

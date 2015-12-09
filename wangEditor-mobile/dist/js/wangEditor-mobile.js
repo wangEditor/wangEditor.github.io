@@ -1006,10 +1006,16 @@ window.___E_mod(function (E, $) {
 
 				// 点击菜单，触发 input 事件
 				var triggerEventType = 'singleTap';
+				var otherTriggerEventType = 'click';
 				if (agent.indexOf('QQ') > 0) {
 					// QQ浏览器，QQ内置浏览器。使用 click
 					triggerEventType = 'click';
+					otherTriggerEventType = 'singleTap';
 				}
+				$trigger.on(otherTriggerEventType, function (e) {
+					// 阻止另一个事件类型的默认行文
+					e.preventDefault();
+				});
 				$trigger.on(triggerEventType, function (e) {
 					if (self.checkTapTime(e, 'img') === false) {
 						return;

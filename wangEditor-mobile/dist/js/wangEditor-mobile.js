@@ -1002,8 +1002,10 @@ window.___E_mod(function (E, $) {
 				});
 
 				// 点击菜单，触发 input 事件
-				$trigger.on('singleTap, click', function (e) {
-					if (self.checkTapTime(e, 'img') === false) {
+				var triggerInputFnTriggered = false;
+				function triggerInputFn (e) {
+					if (triggerInputFnTriggered) {
+						e.preventDefault();
 						return;
 					}
 
@@ -1028,6 +1030,18 @@ window.___E_mod(function (E, $) {
 					}
 
 					self.customCommand(true, fn, e);
+
+					triggerInputFnTriggered = true;
+				}
+				$trigger.on('singleTap', function (e) {
+					if (self.checkTapTime(e, 'img') === false) {
+						return;
+					}
+
+					triggerInputFn(e);
+				});
+				$trigger.on('click', function (e) {
+					triggerInputFn(e);
 				});
 			},
 

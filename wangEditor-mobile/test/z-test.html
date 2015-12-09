@@ -21,6 +21,8 @@
 
 			$('#link1').on('click', function (e) {
 				e.preventDefault();
+
+				$input1.trigger('click');
 			});
 			$('#link1').on('singleTap', function (e) {
 				$input1.trigger('click');

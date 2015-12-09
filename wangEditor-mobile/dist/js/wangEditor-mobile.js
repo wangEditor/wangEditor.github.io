@@ -1002,7 +1002,7 @@ window.___E_mod(function (E, $) {
 				});
 
 				// 点击菜单，触发 input 事件
-				$trigger.on('singleTap', function (e) {
+				$trigger.on('singleTap, click', function (e) {
 					if (self.checkTapTime(e, 'img') === false) {
 						return;
 					}

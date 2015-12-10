@@ -1024,11 +1024,6 @@ window.___E_mod(function (E, $) {
 					triggerEventType = 'click';
 					otherTriggerEventType = 'singleTap';
 				}
-				$trigger.on(otherTriggerEventType, function (e) {
-					// 阻止另一个事件类型的默认行文
-					e.preventDefault();
-				});
-
 				$trigger.on(triggerEventType, function (e) {
 
 					if (triggerEventType !== 'click') {

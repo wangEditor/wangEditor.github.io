@@ -849,8 +849,6 @@ window.___E_mod(function (E, $) {
 				return;
 			}
 			E.log(info);
-
-			$txt.html( $txt.html() + '<br>' + info );
 		}
 
 		// 用随机数生成input 的 id

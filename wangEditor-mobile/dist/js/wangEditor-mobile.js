@@ -1024,6 +1024,9 @@ window.___E_mod(function (E, $) {
 					triggerEventType = 'click';
 					otherTriggerEventType = 'singleTap';
 				}
+				$trigger.on('singleTap', function () {
+					console.log('singleTap');
+				});
 				$trigger.on(triggerEventType, function (e) {
 console.log(triggerEventType);
 					if (triggerEventType !== 'click') {

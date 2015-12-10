@@ -982,7 +982,7 @@ window.___E_mod(function (E, $) {
 			            		log('很遗憾，后台返回error，错误信息为：' + erroInfo);
 			            		
 			            		// 提示错误
-			            		alert('错误：\n' + erroInfo);
+			            		alert('上传图片错误: \n' + erroInfo);
 
 			            		// 移除预览图片
 			            		$prevImg.remove();
@@ -998,7 +998,7 @@ window.___E_mod(function (E, $) {
 			            		loadImg = document.createElement('img');
 			            		loadImg.src = resultSrc;
 			            		loadImg.onload = function () {
-			            			log('现在完成，正式呈现在编辑区域');
+			            			log('下载完成，正式呈现在编辑区域');
 			            			$prevImg.attr('src', resultSrc);
 			            			$prevImg.css({'opacity': '1'});
 			            		};
@@ -1051,7 +1051,12 @@ window.___E_mod(function (E, $) {
 						$inputFlie.trigger('click');
 					}
 
-					self.customCommand(true, fn, e);
+					if (agent.indexOf('QQ') > 0) {
+						//
+						$inputFlie.trigger('click');
+					} else {
+						self.customCommand(true, fn, e);
+					}
 				});
 			},
 

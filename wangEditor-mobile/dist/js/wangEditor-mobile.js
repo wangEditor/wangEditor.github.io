@@ -1017,7 +1017,6 @@ window.___E_mod(function (E, $) {
 				});
 
 				// 点击菜单，触发 input 事件
-				alert(agent);
 				var triggerEventType = 'singleTap';
 				var otherTriggerEventType = 'click';
 				if (agent.indexOf('QQ') > 0) {
@@ -1029,10 +1028,7 @@ window.___E_mod(function (E, $) {
 					// 阻止另一个事件类型的默认行文
 					e.preventDefault();
 				});
-				alert(triggerEventType);
-				alert($trigger.html());
 				$trigger.on(triggerEventType, function (e) {
-					alert('event');
 					if (triggerEventType !== 'click') {
 						// singleTap需要验证
 						if (self.checkTapTime(e, 'img') === false) {

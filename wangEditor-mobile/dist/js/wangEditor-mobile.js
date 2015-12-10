@@ -834,6 +834,7 @@ window.___E_mod(function (E, $) {
 	E.fn.addMenuImg = function (menuId) {
 		var self = this;
 		var $body = self.$body;
+		var $txt = self.$txt;
 		var menus = self.menus;
 		var config = self.config;
 		var uploadImgUrl = config.uploadImgUrl || '';
@@ -848,6 +849,8 @@ window.___E_mod(function (E, $) {
 				return;
 			}
 			E.log(info);
+
+			$txt.html( $txt.html() + '<br>' + info );
 		}
 
 		// 用随机数生成input 的 id
@@ -1023,14 +1026,7 @@ window.___E_mod(function (E, $) {
 				});
 
 				// 点击菜单，触发 input 事件
-				var triggerEventType = 'singleTap';
-				var otherTriggerEventType = 'touchend';
-				if (agent.indexOf('QQ') > 0) {
-					// QQ浏览器，QQ内置浏览器。使用 touchend
-					triggerEventType = 'touchend';
-					otherTriggerEventType = 'singleTap';
-				}
-				$trigger.on(triggerEventType, function (e) {
+				$trigger.on('singleTap', function (e) {
 					// singleTap需要验证
 					if (self.checkTapTime(e, 'img') === false) {
 						return;

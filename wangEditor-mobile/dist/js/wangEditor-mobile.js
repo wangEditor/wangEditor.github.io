@@ -69,9 +69,15 @@
 		self.checkTapTime = function (e, info) {
 			//E.log('checkTapTime', info);
 
+			var type = e.type.toLowerCase();
 			var currentElem;
 			var $currentElem;
 			var result = true;
+
+			if (type.indexOf('tap') < 0) {
+				// 只针对 tap，其他的不管
+				return result;
+			}
 
 			if (e) {
 				// 传入 event 对象，则为每个event对象分配事件
@@ -1018,19 +1024,18 @@ window.___E_mod(function (E, $) {
 
 				// 点击菜单，触发 input 事件
 				var triggerEventType = 'singleTap';
-				var otherTriggerEventType = 'click';
+				var otherTriggerEventType = 'touchend';
 				if (agent.indexOf('QQ') > 0) {
-					// QQ浏览器，QQ内置浏览器。使用 click
-					triggerEventType = 'click';
+					// QQ浏览器，QQ内置浏览器。使用 touchend
+					triggerEventType = 'touchend';
 					otherTriggerEventType = 'singleTap';
 				}
 				$trigger.on(triggerEventType, function (e) {
-					if (triggerEventType !== 'click') {
-						// singleTap需要验证
-						if (self.checkTapTime(e, 'img') === false) {
-							return;
-						}
+					// singleTap需要验证
+					if (self.checkTapTime(e, 'img') === false) {
+						return;
 					}
+
 					// 判断改浏览器是否支持 FormData 和 fileReader
 					if (!window.FileReader || !window.FormData) {
 						alert('当前浏览器不支持html5中的 FileReader 和 FormData，无法上传图片');
@@ -1051,12 +1056,7 @@ window.___E_mod(function (E, $) {
 						$inputFlie.trigger('click');
 					}
 
-					if (agent.indexOf('QQ') > 0) {
-						//
-						$inputFlie.trigger('click');
-					} else {
-						self.customCommand(true, fn, e);
-					}
+					self.customCommand(true, fn, e);
 				});
 			},
 

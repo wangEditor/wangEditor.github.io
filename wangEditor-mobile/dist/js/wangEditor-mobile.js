@@ -1025,7 +1025,7 @@ window.___E_mod(function (E, $) {
 					otherTriggerEventType = 'singleTap';
 				}
 				$trigger.on(triggerEventType, function (e) {
-
+console.log(triggerEventType);
 					if (triggerEventType !== 'click') {
 						// singleTap需要验证
 						if (self.checkTapTime(e, 'img') === false) {

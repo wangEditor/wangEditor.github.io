@@ -286,7 +286,7 @@ window.___E_mod(function (E, $) {
 
 		// -------- menus container 打开按钮
 		var $menuContainerOpenBtn = $('<div class="wangEditor-mobile-menu-container-open-btn"  contentEditable="false"></div>');
-		var $menuContainerOpenBtnItemContaier = $('<div class="item-container"> <div class="item"><a href="#"><i class="icon-wangEditor-m-ellipsis-h"></i></a></div> </div>');
+		var $menuContainerOpenBtnItemContaier = $('<div class="item-container"> <div class="item"><div><i class="icon-wangEditor-m-ellipsis-h"></i></div></div> </div>');
 		$menuContainerOpenBtn.append($menuContainerOpenBtnItemContaier);
 		$menuContainerOpenBtn.append($menuContainerTip.clone())
 							 .append($menuContainerTip1.clone());
@@ -323,7 +323,7 @@ window.___E_mod(function (E, $) {
 			selected: false,
 
 			// 触发器
-			$trigger: $('<a href="#"><i class="icon-wangEditor-m-bold"></i></a>'),
+			$trigger: $('<div><i class="icon-wangEditor-m-bold"></i></div>'),
 			// 包裹触发器的容器
 			$wrap: $('<div class="item"></div>'),
 
@@ -369,7 +369,7 @@ window.___E_mod(function (E, $) {
 			selected: false,
 
 			// 触发器
-			$trigger: $('<a href="#"><i class="icon-wangEditor-m-header"></i></a>'),
+			$trigger: $('<div><i class="icon-wangEditor-m-header"></i></div>'),
 			// 包裹触发器的容器
 			$wrap: $('<div class="item"></div>'),
 
@@ -421,7 +421,7 @@ window.___E_mod(function (E, $) {
 			selected: false,
 
 			// 触发器
-			$trigger: $('<a href="#"><i class="icon-wangEditor-m-brush"></i></a>'),
+			$trigger: $('<div><i class="icon-wangEditor-m-brush"></i></div>'),
 			// 包裹触发器的容器
 			$wrap: $('<div class="item"></div>'),
 
@@ -475,7 +475,7 @@ window.___E_mod(function (E, $) {
 			selected: false,
 
 			// 触发器
-			$trigger: $('<a href="#"><i class="icon-wangEditor-m-quote-left"></i></a>'),
+			$trigger: $('<div><i class="icon-wangEditor-m-quote-left"></i></div>'),
 			// 包裹触发器的容器
 			$wrap: $('<div class="item"></div>'),
 
@@ -575,7 +575,7 @@ window.___E_mod(function (E, $) {
 			selected: false,
 
 			// 触发器
-			$trigger: $('<a href="#"><i class="icon-wangEditor-m-list-ul"></i></a>'),
+			$trigger: $('<div><i class="icon-wangEditor-m-list-ul"></i></div>'),
 			// 包裹触发器的容器
 			$wrap: $('<div class="item"></div>'),
 
@@ -622,7 +622,7 @@ window.___E_mod(function (E, $) {
 			selected: false,
 
 			// 触发器
-			$trigger: $('<a href="#"><i class="icon-wangEditor-m-checkbox-checked"></i></a>'),
+			$trigger: $('<div><i class="icon-wangEditor-m-checkbox-checked"></i></div>'),
 			// 包裹触发器的容器
 			$wrap: $('<div class="item"></div>'),
 
@@ -696,7 +696,7 @@ window.___E_mod(function (E, $) {
 			selected: false,
 
 			// 触发器
-			$trigger: $('<a href="#"><i class="icon-wangEditor-m-happy"></i></a>'),
+			$trigger: $('<div><i class="icon-wangEditor-m-happy"></i></div>'),
 			// 包裹触发器的容器
 			$wrap: $('<div class="item"</div>'),
 
@@ -707,7 +707,7 @@ window.___E_mod(function (E, $) {
 			renderModal: function () {
 				var menuData = this;
 				var $modal = menuData.$modal;
-				var itemTpl = '<a href="#" class="command-link" commandValue="#{imgUrl}"><img src="#{imgUrl}"/></a>';
+				var itemTpl = '<span class="command-link" commandValue="#{imgUrl}"><img src="#{imgUrl}"/></span>';
 				var contentHtmlArr = [];
 
 				// 拼接数据
@@ -852,7 +852,7 @@ window.___E_mod(function (E, $) {
 			selected: false,
 
 			// 触发器
-			$trigger: $('<a href="#"><i class="icon-wangEditor-m-picture"></i></a>'),
+			$trigger: $('<div><i class="icon-wangEditor-m-picture"></i></div>'),
 			// 包裹触发器的容器
 			$wrap: $('<div class="item"</div>'),
 
@@ -1028,7 +1028,9 @@ window.___E_mod(function (E, $) {
 					// 阻止另一个事件类型的默认行文
 					e.preventDefault();
 				});
+
 				$trigger.on(triggerEventType, function (e) {
+
 					if (triggerEventType !== 'click') {
 						// singleTap需要验证
 						if (self.checkTapTime(e, 'img') === false) {
@@ -1374,7 +1376,7 @@ window.___E_mod(function (E, $) {
 		var $menuContainer = self.$menuContainer;
 
 		// 点击 openbtn 显示菜单
-		$menuContainerOpenBtn.find('a').on('singleTap', function (e) {
+		$menuContainerOpenBtn.on('singleTap', function (e) {
 			if (self.checkTapTime(e, '$menuContainerOpenBtn') === false) {
 				return;
 			}

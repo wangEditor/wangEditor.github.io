@@ -1067,9 +1067,7 @@ window.___E_mod(function (E, $) {
 						$inputFlie.trigger('click');
 					}
 
-					if (!isQQMobile) {
-						self.customCommand(true, fn, e);
-					}
+					self.customCommand(true, fn, e);
 				});
 			},
 

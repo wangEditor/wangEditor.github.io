@@ -1,6 +1,13 @@
 body{
     font-family: '微软雅黑';
 }
+
+body * {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
 p{
     line-height: 1.8;
 }

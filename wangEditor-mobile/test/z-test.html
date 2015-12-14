@@ -9,31 +9,11 @@
 <body style="padding:20px;">
 	
 	<input id="input1" type="file" accept="image/*">
-
-	<a id="link1" href="#">click</a>
 	
-	<script type="text/javascript" src="../dist/js/lib/zepto.js"></script>
-	<script type="text/javascript" src="../dist/js/lib/zepto.touch.js"></script>
 	<script type="text/javascript">
 		$(function () {
-alert(navigator.userAgent);
-			var $input1 = $('#input1');
-
-			$('#link1').on('click', function (e) {
-				$input1.trigger('click');
-				e.preventDefault();
-
-
-			});
-			$('#link1').on('singleTap', function (e) {
-				$input1.trigger('click');
-
-				e.preventDefault();
-			});
-
-			$input1.on('change', function (e) {
-				alert($input1.get(0).files[0].name);
-			});
+			alert(navigator.userAgent);
+			
 		});
 	</script>
 

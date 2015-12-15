@@ -1,0 +1,128 @@
+.jumbotron {
+    background-color: #f1f1f1;
+    padding: 35px 0;
+    margin-bottom: 30px;
+    box-shadow: 0 0 10px #999;
+}
+.jumbotron h1 {
+    font-size:35px;
+    color: #555;
+    margin-bottom: 20px;
+    text-shadow: 0 0 1px #ccc;
+}
+.jumbotron p {
+    color: #777;
+    font-size:19px;
+    line-height: 2;
+    text-shadow: 0 0 1px #ccc;
+}
+
+.jumbotron a {
+    font-size:17px;
+    opacity: 0.7;
+    color: #428bca;
+}
+
+.body-content {
+    width: 100%;
+}
+
+
+
+.body-content .left {
+    float: left; 
+    width: 50%; 
+    text-align: right; 
+    padding-right: 40px;
+}
+.body-content .left .img-bg {
+    display: inline-block;
+    width: 340px;
+    text-align: center;
+    height: 690px;
+    background: #f1f1f1 url(img/m/bg.jpg) no-repeat center;
+    background-size: 204%;
+    padding-top: 74px;
+}
+.body-content .left .img-bg img {
+    width: 300px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+}
+
+
+
+.body-content .right {
+    float: right; 
+    width: 50%; 
+    text-align: left; 
+    padding-left: 40px;
+}
+
+.body-content .right .browser-container {
+    margin-top: 5px;
+    margin-bottom: 50px;
+}
+.body-content .right .browser-container .title {
+    font-size: 16px;
+    font-weight: 300;
+    margin-bottom: 10px;
+}
+.body-content .right .browser-container .item-container {
+    width: 400px;
+}
+.body-content .right .browser-container .item-container .item {
+    float: left;
+    width: 70px;
+    height: 80px;
+    margin-right: 5px;
+    padding-top: 65px;
+    text-align: center;
+    line-height: 1;
+    color: #666;
+}
+.safari-item {
+    background: url(img/m/safari.jpeg) no-repeat;
+    background-position: center 0;
+    background-size: 85%;
+}
+.chrome-item {
+    background: url(img/m/chrome.jpeg) no-repeat;
+    background-size: 75%;
+    background-position: center 4px;
+}
+.uc-item {
+    background: url(img/m/UC.jpeg) no-repeat;
+    background-size: 85%;
+    background-position: center 4px;
+}
+.qqm-item {
+    background: url(img/m/QQM.jpeg) no-repeat;
+    background-size: 80%;
+    background-position: center 2px;
+}
+.weixin-item {
+    background: url(img/m/wechat.jpeg) no-repeat;
+    background-size: 85%;
+    background-position: center 2px;
+}
+
+.body-content .right .erweima-container {
+    margin-top: 5px;
+}
+.body-content .right .erweima-container .title {
+    font-size: 16px;
+    font-weight: 300;
+    margin-bottom: 20px;
+}
+.body-content .right .erweima-container .img-container {
+    width: 300px;
+    padding: 10px;
+    box-shadow: 0 0 5px #ccc;
+}
+
+
+
+
+
+

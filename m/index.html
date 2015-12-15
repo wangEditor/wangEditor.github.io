@@ -13,29 +13,7 @@
     <![endif]-->
 
     <link rel="stylesheet" type="text/css" href="../css/common.css">
-
-	<style type="text/css">
-
-		.jumbotron {
-			background-color: #f1f1f1;
-			margin-bottom: 20px;
-			border: none;
-		}
-
-		.jumbotron a {
-			opacity: 0.6;
-		}
-
-		.jumbotron a:hover {
-			opacity: 1;
-		}
-	
-		.animate-img {
-			border: 1px solid #ccc;
-			width: 300px;
-		}
-
-	</style>
+    <link rel="stylesheet" type="text/css" href="../css/mobile-index.css">
 </head>
 <body>
 
@@ -45,11 +23,11 @@
 	    <center>
 	        <h1>wangEditor-mobile</h1>
 	        <p>
-	            第一款适用于手机操作、手指触摸的富文本编辑器，
+	            真正适用于手指触摸的富文本编辑器！
 	            使用 javascript 开发，轻松集成到 webapp
 	        </p>
-	        <div >
-	        	<a href="#" target="_blank" class="btn btn-default">
+	        <div>
+	        	<a href="javascript:alert('文档正在完善中...');" target="_blank" class="btn btn-default">
 	        		<i class="fa fa-th-list"></i> 文档
 	        	</a>
 	        	&nbsp;
@@ -58,11 +36,11 @@
 	        	</a>
 	        	&nbsp;
 	        	<a href="https://github.com/wangfupeng1988/wangEditor-mobile" target="_blank" class="btn btn-default">
-	        		<i class="fa fa-code-fork"></i>	fork on github
+	        		<i class="fa fa-code-fork"></i>	源码
 	        	</a>
 	        	&nbsp;
 	        	<a href="http://wangeditor.github.io/" target="_blank" class="btn btn-default">
-	        		<i class="fa fa-laptop"></i>	wangEditor PC版
+	        		<i class="fa fa-laptop"></i> wangEditor
 	        	</a>
 	        </div>
 	        
@@ -70,29 +48,45 @@
 	  </div>
 	</div>
 
-	<div class="clearfix">
-		<div style="float:left; width:50%; text-align:right; padding-right:40px;">
-			<img src="images/animate.gif" class="animate-img">
+	<div class="body-content clearfix">
+		<div class="left">
+			<div class="img-bg">
+				<img src="images/animate.gif">
+			</div>
 		</div>
-		<div style="float:right; width:50%; text-align:left; padding-left:40px;">
+		<div class="right">
+			<div class="browser-container">
+				<p class="title">
+					<i class="fa fa-check-square-o"></i>
+					目前支持的浏览器（支持iOS、Android系统）：
+				</p>
+				
+				<div class="item-container clearfix">
+					<div class="item safari-item">safari</div>
+					<div class="item chrome-item">chrome</div>
+					<div class="item uc-item">UC浏览器</div>
+					<div class="item qqm-item">QQ浏览器</div>
+					<div class="item weixin-item">微信</div>
+				</div>
+
+			</div>
 			
-			<p><b>目前支持的浏览器（仅支持iOS、Android系统）：</b></p>
-			<ul style="padding-left: 30px;">
-				<li>safari</li>
-				<li>chrome</li>
-				<li>UC浏览器</li>
-				<li>微信</li>
-				<li>其他浏览器正在兼容中……</li>
-			</ul>
-			<br/>
-			<p><b>扫描二维码预览demo</b></p>
-			<img src="images/ewm.png">
+
+			<div class="erweima-container">
+				<p class="title">
+					<i class="fa fa-eye"></i>
+					扫描二维码预览demo
+				</p>
+				<div class="img-container">
+					<img src="images/ewm.png">
+				</div>
+			</div>
+			
 		</div>
 	</div>
 
 	<!--footer-->
     <footer>
-        <hr class='diviver'>
         <center>
             <p>&copy; wangEditor.github.io 2015</p>
         </center>

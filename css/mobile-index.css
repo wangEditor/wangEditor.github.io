@@ -39,10 +39,11 @@
     display: inline-block;
     width: 340px;
     text-align: center;
-    height: 690px;
-    background: #f1f1f1 url(img/m/bg.jpg) no-repeat center;
-    background-size: 204%;
-    padding-top: 74px;
+    height: 680px;
+    background: url(img/m/bg.png) no-repeat;
+    background-position: 45% 50%;
+    background-size: 104%;
+    padding-top: 69px;
 }
 .body-content .left .img-bg img {
     width: 300px;
@@ -119,6 +120,7 @@
     width: 300px;
     padding: 10px;
     box-shadow: 0 0 5px #ccc;
+    border-radius: 5px;
 }
 
 

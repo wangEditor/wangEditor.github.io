@@ -870,7 +870,6 @@ window.___E_mod(function (E, $) {
 			// 触发器
 			$trigger: (function () {
 				// 不同os、不同browser的情况不一样
-
 				if (isAndroid || isUC) {
 					return $('<div><i class="icon-wangEditor-m-picture"></i></div>');
 				} else {
@@ -1015,6 +1014,7 @@ window.___E_mod(function (E, $) {
 
 			            	var $prevImgContainer = $('#' + prveImgContainerId);
 			            	$prevImgContainer.remove();
+	
 			            	if (xhr.abort) {
 			            		xhr.abort();
 			            	}
@@ -1276,7 +1276,7 @@ window.___E_mod(function (E, $) {
 				return;
 			}
 
-			if ($target.hasClass('wangEditor-mobile-txt')) {
+			if ($target.get(0) === $txt.get(0)) {
 				// 如果当前选中的编辑区域，则隐藏菜单，返回
 				self.hideMenuContainer();
 				return;
@@ -1320,6 +1320,12 @@ window.___E_mod(function (E, $) {
 		$txt.on('keydown', function (e) {
 			// 隐藏菜单
 			self.hideMenuContainer();
+
+			// 删除并且没有内容的时候，就禁止再删除了
+			var html = $txt.html();
+			if (e.keyCode === 8 && /^<p[^<>]*><br><\/p>$/.test(html)) {
+				e.preventDefault();
+			}
 		});
 
 		// longtap doubletap 隐藏菜单
@@ -1432,6 +1438,7 @@ window.___E_mod(function (E, $) {
 
 		// 获取源码
 		sourceCode = $txtClone.html();
+		sourceCode = sourceCode.replace(/\s?class=""/g, '');
 		$textarea.val(sourceCode);
 	};
 
@@ -1480,7 +1487,7 @@ window.___E_mod(function (E, $) {
 			// 停靠在编辑器区域上方
 			top = txtTop;
 		}
-		top = top - menuHeight - 15;
+		top = top - 55;  // 上移 55px 即菜单栏的高度
 
 
 		// 设置菜单的样式，定位

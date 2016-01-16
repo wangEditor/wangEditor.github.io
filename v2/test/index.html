@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>wangEditor2 test</title>
+    <link rel="stylesheet" type="text/css" href="../dist/css/wangEditor.min.css">
+    <style type="text/css">
+        #div1 {
+            width: 100%;
+            height: 270px;
+        }
+        .wangEditor-txt blockquote {
+            display: block; 
+            border-left: 8px solid #d0e5f2;
+            padding: 5px 10px;
+            margin: 10px 0; 
+            line-height: 1.4; 
+            font-size: 100%;
+            background-color: #f1f1f1;
+        }
+        .wangEditor-txt table {
+            border: none;
+            border-collapse: collapse;
+        }
+        .wangEditor-txt table td {
+            border: 1px solid #f1f1f1;
+            padding: 3px 5px;
+            min-width: 50px;
+            height: 20px;
+        }
+    </style>
+</head>
+<body style="padding:0 20px;">
+    <p>wangEditor2.0 demo演示（功能尚未开发完成），支持 IE8+ 浏览器</p>
+    <div class="container">
+        <div id="div1">
+            <h3>标题标题1</h3>
+            <p>请输入内容</p>
+            <p><img src="https://ss1.baidu.com/70cFfyinKgQFm2e88IuM_a/forum/pic/item/7aec54e736d12f2e2a9d726c49c2d56285356826.jpg"></p>
+            <table>
+                <tr>
+                    <td>#</td>
+                    <td>姓名</td>
+                    <td>年龄</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>zhang</td>
+                    <td>20</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>wang</td>
+                    <td>30</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>lee</td>
+                    <td>40</td>
+                </tr>
+            </table>
+            <p>请输入内容</p>
+            <p><a href="#">链接链接</a></p>
+            <p>请输入内容</p>
+        </div>
+    </div>
+    
+    
+    <script type="text/javascript" src="../dist/js/lib/jquery-1.10.2.min.js"></script>
+    <script type="text/javascript" src="../dist/js/wangEditor.js"></script>
+    <script type="text/javascript">
+        $(function () {
+            
+            var editor = new wangEditor('div1');
+
+            if (window.console) {
+                console.log(editor);
+            }
+
+            editor.create();
+
+        });
+    </script>
+</body>
+</html>

@@ -38,6 +38,13 @@
 .wangEditor-container textarea:focus {
   outline: none;
 }
+.wangEditor-container .height-tip {
+  position: absolute;
+  width: 3px;
+  background-color: #ccc;
+  left: 0;
+  transition: top .2s;
+}
 
 .wangEditor-drop-list {
   display: none;
@@ -105,6 +112,13 @@
 .wangEditor-drop-panel input[type=text].block {
   display: block;
   width: 100%;
+}
+.wangEditor-drop-panel textarea {
+  border: 1px solid #ccc;
+}
+.wangEditor-drop-panel textarea:focus {
+  outline: none;
+  border-color: #1e88e5;
 }
 .wangEditor-drop-panel button {
   font-size: 14px;
@@ -393,11 +407,4 @@
 }
 .wangEditor-container .wangEditor-txt:focus {
   outline: none;
-}
-.wangEditor-container .wangEditor-txt .height-tip {
-  position: absolute;
-  width: 3px;
-  background-color: #ccc;
-  left: 0;
-  transition: top .2s;
 }

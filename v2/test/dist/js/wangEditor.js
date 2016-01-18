@@ -599,6 +599,9 @@ window.___EXT(function (E, $) {
         // 更新菜单样式
         editor.updateMenuStyle();
 
+        // 记录内容，以便撤销
+        editor.undoRecord();
+
         // 隐藏 dropPanel dropList modal  设置 200ms 间隔
         function hidePanelAndModal() {
             editor.hideDropPanelAndModal();
@@ -652,7 +655,7 @@ window.___EXT(function (E, $) {
     var matchesSelector;
 
     // matchesSelector hook
-    function matchesSelectorForIE(selector) {
+    function _matchesSelectorForIE(selector) {
         var elem = this;
         var $elems = $(selector);
         var result = false;
@@ -670,7 +673,7 @@ window.___EXT(function (E, $) {
 
     // 从当前的elem，往上去查找合法标签 如 p head table blockquote ul ol 等
     E.fn.getLegalTags = function (elem) {
-        var legalTags = E.config.legalTags;
+        var legalTags = this.config.legalTags;
         if (!legalTags) {
             E.error('配置项中缺少 legalTags 的配置');
             return;
@@ -694,7 +697,7 @@ window.___EXT(function (E, $) {
         }
         if (!matchesSelector) {
             // 如果浏览器本身不支持 matchesSelector 则使用自定义的hook
-            matchesSelector = matchesSelectorForIE;
+            matchesSelector = _matchesSelectorForIE;
         }
 
         var txt = this.txt.$txt.get(0);
@@ -721,6 +724,85 @@ window.___EXT(function (E, $) {
         return;
     };
 
+});
+// undo redo
+window.___EXT(function (E, $) {
+
+    var redoList = [];
+    var undoList = [];
+    var length = 20;  // 缓存的最大长度
+
+    // 数据处理
+    function _handle(editor, data) {
+        // var range = data.range;
+        // var range2 = range.cloneRange && range.cloneRange();
+        var val = data.val;
+
+        if(val == null) {
+            return;
+        }
+
+        // 保存数据
+        editor.txt.$txt.html(val);
+        editor.updateValue();
+
+        // ?????
+        // 注释：$txt 被重新赋值之后，range会被重置，cloneRange() 也不好使
+        // // 重置选区
+        // if (range2) {
+        //     editor.restoreSelection(range2);
+        // }
+    }
+
+    // 记录
+    E.fn.undoRecord = function () {
+        var editor = this;
+        var $txt = editor.txt.$txt;
+
+        // 清空 redolist
+        if (redoList.length) {
+            redoList = [];
+        }
+
+        // 添加数据到 undoList
+        undoList.unshift({
+            range: editor.currentRange(),  // 将当前的range也记录下
+            val: $txt.html()
+        });
+
+        // 限制 undoList 长度
+        if (undoList.length > length) {
+            undoList.pop();
+        }
+    };
+
+    // undo 操作
+    E.fn.undo = function () {
+        if (!undoList.length) {
+            return;
+        }
+
+        // 取出 undolist 第一个值，加入 redolist
+        var data = undoList.shift();
+        redoList.unshift(data);
+
+        // 并修改编辑器的内容
+        _handle(this, data);
+    };
+
+    // redo 操作
+    E.fn.redo = function () {
+        if (!redoList.length) {
+            return;
+        }
+
+        // 取出 redolist 第一个值，加入 undolist
+        var data = redoList.shift();
+        undoList.unshift(data);
+
+        // 并修改编辑器的内容
+        _handle(this, data);
+    };
 });
 // 暴露给用户的 API
 window.___EXT(function (E, $) {
@@ -787,14 +869,13 @@ window.___EXT(function (E, $) {
 
     var MenuContainer = E.MenuContainer;
 
-    // 渲染
     MenuContainer.fn.render = function () {
         var $menuContainer = this.$menuContainer;
         var $editorContainer = this.editor.$editorContainer;
 
         $editorContainer.append($menuContainer);
     };
-
+    
     // 获取菜单栏的高度
     MenuContainer.fn.height = function () {
         var $menuContainer = this.$menuContainer;
@@ -1519,7 +1600,7 @@ window.___EXT(function (E, $) {
     DropPanel.fn.focusFirstInput = function () {
         var self = this;
         var $panel = self.$panel;
-        $panel.find('input[type=text]').each(function () {
+        $panel.find('input[type=text],textarea').each(function () {
             var $input = $(this);
             if ($input.attr('disabled') == null) {
                 $input.focus();
@@ -1641,7 +1722,10 @@ window.___EXT(function (E, $) {
         self.contentEmptyHandle();
 
         // enter时，不能使用 div 换行
-        self.bindEnterEvent();
+        self.bindEnterForDiv();
+
+        // tab 插入4个空格
+        self.bindTabEvent();
     };
 
     // 点击img时的事件
@@ -1735,7 +1819,7 @@ window.___EXT(function (E, $) {
     };
 
     // enter时，不能使用 div 换行
-    Txt.fn.bindEnterEvent = function () {
+    Txt.fn.bindEnterForDiv = function () {
         var tags = E.config.legalTags; // 配置中编辑器要求的合法标签，如 p head table blockquote ul ol 等
         var self = this;
         var editor = self.editor;
@@ -1765,6 +1849,9 @@ window.___EXT(function (E, $) {
             if (!targetElem) {
                 // 没找到合法标签，就去查找 div
                 targetElem = editor.getSelfOrParentByName(rangeElem, 'div');
+                if (!targetElem) {
+                    return;
+                }
                 $targetElem = $(targetElem);
 
                 if (e.type === 'keydown') {
@@ -1785,6 +1872,24 @@ window.___EXT(function (E, $) {
             }
         });
     };
+
+    // tab 时，插入4个空格
+    Txt.fn.bindTabEvent = function () {
+        var self = this;
+        var editor = self.editor;
+        var $txt = self.$txt;
+
+        $txt.on('keydown', function (e) {
+            if (e.keyCode !== 9) {
+                // 只监听 tab 按钮
+                return;
+            }
+            // 如果浏览器支持 insertHtml 则插入4个空格。如果不支持，就不管了
+            if (editor.queryCommandSupported('insertHtml')) {
+                editor.command(e, 'insertHtml', '&nbsp;&nbsp;&nbsp;&nbsp;');
+            }
+        });
+    };
 });
 // Txt.fn api
 window.___EXT(function (E, $) {
@@ -1796,8 +1901,8 @@ window.___EXT(function (E, $) {
     // 渲染
     Txt.fn.render = function () {
         var $txt = this.$txt;
-        var $container = this.editor.$editorContainer;
-        $container.append($txt);
+        var $editorContainer = this.editor.$editorContainer;
+        $editorContainer.append($txt);
     };
 
     // 计算高度
@@ -1876,26 +1981,28 @@ window.___EXT(function (E, $) {
 
     // 鼠标hover时候，显示p、head的高度
     Txt.fn.showHeightOnHover = function () {
+        var editor = this.editor;
+        var $editorContainer = editor.$editorContainer;
+        var menuContainer = editor.menuContainer;
         var $txt = this.$txt;
         var $tip = $('<i class="height-tip"><i>');
         var isTipInTxt = false;
 
         function addAndShowTip ($target) {
             if (!isTipInTxt) {
-                $txt.append($tip);
+                $editorContainer.append($tip);
                 isTipInTxt = true;
             }
 
             var height = $target.height();
             var top = $target.position().top;
-            var srcollTop = $txt.scrollTop();
             var marginTop = parseInt($target.css('margin-top'), 10);
             var paddingTop = parseInt($target.css('padding-top'), 10);
             var marginBottom = parseInt($target.css('margin-bottom'), 10);
             var paddingBottom = parseInt($target.css('padding-bottom'), 10);
             $tip.css({
                 height: height + paddingTop + marginTop + paddingBottom + marginBottom,
-                top: top + srcollTop
+                top: top + menuContainer.height()
             });
         }
         function removeTip () {
@@ -1906,7 +2013,7 @@ window.___EXT(function (E, $) {
             isTipInTxt = false;
         }
 
-        $txt.on('mouseenter', 'ul,ol,blockquote,p,h1,h2,h3,h4,h5,table', function (e) {
+        $txt.on('mouseenter', 'ul,ol,blockquote,p,h1,h2,h3,h4,h5,table,pre', function (e) {
             addAndShowTip($(e.currentTarget));
         }).on('mouseleave', function () {
             removeTip();
@@ -2030,7 +2137,11 @@ window.___EXT(function (E, $) {
         searchlocation: '搜索位置',
         dynamicMap: '动态地图',
         clearLocation: '清除位置',
-        langDynamicOneLocation: '动态地图只能显示一个位置'
+        langDynamicOneLocation: '动态地图只能显示一个位置',
+        insertcode: '插入代码',
+        undo: '撤销',
+        redo: '重复',
+        fullscreen: '全屏'
     };
 });
 // 全局配置
@@ -2039,7 +2150,7 @@ window.___EXT(function (E, $) {
     E.config = {};
 
     // 编辑器允许的标签
-    E.config.legalTags = 'p,h1,h2,h3,h4,h5,h6,blockquote,table,ul,ol';
+    E.config.legalTags = 'p,h1,h2,h3,h4,h5,h6,blockquote,table,ul,ol,pre';
 
     // 语言包
     E.config.lang = E.langs.zhn;
@@ -2073,7 +2184,12 @@ window.___EXT(function (E, $) {
         '|',
         'img',
         'vedio',
-        'location'
+        'location',
+        'insertcode',
+        '|',
+        'undo',
+        'redo',
+        'fullscreen'
     ];
 
     E.config.colors = {
@@ -2299,6 +2415,22 @@ window.___EXT(function (E, $) {
         location: {
             normal: '<a href="#"><i class="wangeditor-menu-img-location"></i></a>',
             selected: '.selected'
+        },
+        insertcode: {
+            normal: '<a href="#"><i class="wangeditor-menu-img-terminal"></i></a>',
+            selected: '.selected'
+        },
+        undo: {
+            normal: '<a href="#"><i class="wangeditor-menu-img-ccw"></i></a>',
+            selected: '.selected'
+        },
+        redo: {
+            normal: '<a href="#"><i class="wangeditor-menu-img-cw"></i></a>',
+            selected: '.selected'
+        },
+        fullscreen: {
+            normal: '<a href="#"><i class="wangeditor-menu-img-enlarge2"></i></a>',
+            selected: '<a href="#" class="selected"><i class="wangeditor-menu-img-shrink2"></i></a>'
         }
      };
      
@@ -2313,6 +2445,14 @@ window.___EXT(function (E, $) {
     };
 
 });
+// 增加 container
+window.___EXT(function (E, $) {
+
+    E.fn.addEditorContainer = function () {
+        this.$editorContainer = $('<div class="wangEditor-container"></div>');
+    };
+
+});
 // 增加编辑区域对象
 window.___EXT(function (E, $) {
 
@@ -2321,15 +2461,6 @@ window.___EXT(function (E, $) {
         var txt = new E.Txt(editor);
 
         editor.txt = txt;
-    };
-
-});
-// 增加 container
-window.___EXT(function (E, $) {
-
-    E.fn.addEditorContainer = function () {
-        var $editorContainer = $('<div class="wangEditor-container"></div>');
-        this.$editorContainer = $editorContainer;
     };
 
 });
@@ -4276,6 +4407,271 @@ window.___EXT(function (E, $) {
     }
 
 });
+// insertcode 菜单
+window.___EXT(function (E, $) {
+
+    E.menuFn(function () {
+        var editor = this;
+        var menuId = 'insertcode';
+        var lang = editor.config.lang;
+
+        // 创建 menu 对象
+        var menu = new E.Menu({
+            editor: editor,
+            id: menuId,
+            title: lang.insertcode
+        });
+
+        // click 事件
+        menu.clickEvent = function (e) {
+            var menu = this;
+            var dropPanel = menu.dropPanel;
+
+            // 隐藏
+            if (dropPanel.isShowing) {
+                dropPanel.hide();
+                return;
+            }
+
+            // 显示
+            $textarea.val('');
+            dropPanel.show();
+        };
+
+        // 选中状态下的 click 事件
+        menu.clickEventSelected = function (e) {
+            var menu = this;
+            var dropPanel = menu.dropPanel;
+
+            // 隐藏
+            if (dropPanel.isShowing) {
+                dropPanel.hide();
+                return;
+            }
+
+            // 显示
+            dropPanel.show();
+
+            var rangeElem = editor.getRangeElem();
+            var targetElem = editor.getSelfOrParentByName(rangeElem, 'pre');
+            if (targetElem) {
+                // 确定找到 pre 之后，再找 code
+                targetElem = editor.getSelfOrParentByName(rangeElem, 'code');
+            }
+            if (!targetElem) {
+                return;
+            }
+
+            $textarea.val(targetElem.innerHTML);
+        };
+
+        // 定义更新选中状态的事件
+        menu.updateSelectedEvent = function () {
+            var self = this; //菜单对象
+            var editor = self.editor;
+            var rangeElem;
+
+            rangeElem = editor.getRangeElem();
+            rangeElem = editor.getSelfOrParentByName(rangeElem, 'pre');
+
+            if (rangeElem) {
+                return true;
+            }
+
+            return false;
+        };
+
+        // 创建 panel
+        var $content = $('<div></div>');
+        var $textarea = $('<textarea></textarea>');
+        contentHandle($content);
+        menu.dropPanel = new E.DropPanel(editor, menu, {
+            $content: $content,
+            width: 500
+        });
+
+        // 增加到editor对象中
+        editor.menus[menuId] = menu;
+
+        // ------ 增加 content 内容 ------
+        function contentHandle($content) {
+            // textarea 区域
+            var $textareaContainer = $('<div></div>');
+            $textareaContainer.css({
+                margin: '15px 5px 5px 5px',
+                height: '160px',
+                'text-align': 'center'
+            });
+            $textarea.css({
+                width: '100%',
+                height: '100%',
+                padding: '10px'
+            });
+            $textarea.on('keydown', function (e) {
+                // 取消 tab 键默认行为
+                if (e.keyCode === 9) {
+                    e.preventDefault();
+                }
+            });
+            $textareaContainer.append($textarea);
+            $content.append($textareaContainer);
+
+            // 按钮区域
+            var $btnContainer = $('<div></div>');
+            var $btnSubmit = $('<button class="right">' + lang.submit + '</button>');
+            var $btnCancel = $('<button class="right gray">' + lang.cancel + '</button>');
+            $btnContainer.append($btnSubmit).append($btnCancel);
+            $content.append($btnContainer);
+
+            // 取消按钮
+            $btnCancel.click(function () {
+                menu.dropPanel.hide();
+            });
+
+            // 确定按钮
+            var codeTpl = '<pre style="max-width:100%;overflow-x:auto;"><code>{#content}</code></pre>';
+            $btnSubmit.click(function (e) {
+                var val = $textarea.val();
+                if (!val) {
+                    // 无内容
+                    $textarea.focus();
+                    return;
+                }
+
+                // 替换标签
+                val = val.replace(/&/gm, '&amp;')
+                         .replace(/</gm, '&lt;')
+                         .replace(/>/gm, '&gt;');
+
+                // ---- menu 未选中状态 ----
+                if (!menu.selected) {
+                    // 拼接html
+                    var html = codeTpl.replace('{#content}', val);
+                    editor.command(e, 'insertHtml', html);
+                    return;
+                }
+
+                // ---- menu 选中状态 ----
+                var rangeElem = editor.getRangeElem();
+                var targetElem = editor.getSelfOrParentByName(rangeElem, 'pre');
+                if (targetElem) {
+                    // 确定找到 pre 之后，再找 code
+                    targetElem = editor.getSelfOrParentByName(rangeElem, 'code');
+                }
+                if (!targetElem) {
+                    return;
+                }
+
+                function commandFn() {
+                    $(targetElem).html(val);
+                }
+                function callback() {
+                    editor.restoreSelectionByElem(targetElem);
+                }
+                editor.customCommand(e, commandFn, callback);
+            });
+        }
+
+        // ------ enter 时，不另起标签，只换行 ------
+        editor.txt.$txt.on('keydown', function (e) {
+            if (e.keyCode !== 13) {
+                return;
+            }
+            var rangeElem = editor.getRangeElem();
+            var targetElem = editor.getSelfOrParentByName(rangeElem, 'code');
+            if (!targetElem) {
+                return;
+            }
+
+            editor.command(e, 'insertHtml', '\n');
+        });
+    });
+
+});
+// undo 菜单
+window.___EXT(function (E, $) {
+
+    E.menuFn(function () {
+        var editor = this;
+        var menuId = 'undo';
+        var lang = editor.config.lang;
+
+        // 创建 menu 对象
+        var menu = new E.Menu({
+            editor: editor,
+            id: menuId,
+            title: lang.undo
+        });
+
+        // click 事件
+        menu.clickEvent = function (e) {
+            editor.undo();
+        };
+
+        // 增加到editor对象中
+        editor.menus[menuId] = menu;
+
+
+        // ------------ enter 时，做记录 ------------
+        editor.ready(function () {
+            var editor = this;
+            var $txt = editor.txt.$txt;
+            $txt.on('keydown', function (e) {
+                if (e.keyCode !== 13) {
+                    // 只监听 tab 按钮
+                    return;
+                }
+                editor.undoRecord();
+            });
+        });
+    });
+
+});
+// redo 菜单
+window.___EXT(function (E, $) {
+
+    E.menuFn(function () {
+        var editor = this;
+        var menuId = 'redo';
+        var lang = editor.config.lang;
+
+        // 创建 menu 对象
+        var menu = new E.Menu({
+            editor: editor,
+            id: menuId,
+            title: lang.redo
+        });
+
+        // click 事件
+        menu.clickEvent = function (e) {
+            editor.redo();
+        };
+
+        // 增加到editor对象中
+        editor.menus[menuId] = menu;
+    });
+
+});
+// 全屏 菜单
+window.___EXT(function (E, $) {
+
+    E.menuFn(function () {
+        var editor = this;
+        var menuId = 'fullscreen';
+        var lang = editor.config.lang;
+
+        // 创建 menu 对象
+        var menu = new E.Menu({
+            editor: editor,
+            id: menuId,
+            title: lang.fullscreen
+        });
+
+        // 增加到editor对象中
+        editor.menus[menuId] = menu;
+    });
+
+});
 // 渲染menus
 window.___EXT(function (E, $) {
 
@@ -4396,8 +4792,8 @@ window.___EXT(function (E, $) {
         // txt内容变化时，随时更新 menu style
         txt.updateMenuStyleEvent();
 
-        // 鼠标hover时，显示 p head 高度
-        txt.showHeightOnHover();
+        // 鼠标hover时，显示 p head 高度（暂时关闭这个功能）
+        // txt.showHeightOnHover();
 
     };
 

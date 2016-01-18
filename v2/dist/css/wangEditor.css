@@ -178,8 +178,8 @@
 }
 .wangEditor-drop-panel table.choose-table td {
   border: 1px solid #f1f1f1;
-  width: 12px;
-  height: 8px;
+  width: 16px;
+  height: 12px;
 }
 .wangEditor-drop-panel table.choose-table td.active {
   background-color: #f1f1f1;
@@ -298,6 +298,14 @@
 .wangeditor-menu-img-strikethrough:before{content: "\ea65";}
 .wangeditor-menu-img-desktop:before{content: "\f108";}
 .wangeditor-menu-img-tablet:before{content: "\f10a";}
+.wangEditor-fullscreen {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+}
+
 .wangEditor-menu-container {
   width: 100%;
   border-left: 1px solid #ccc;

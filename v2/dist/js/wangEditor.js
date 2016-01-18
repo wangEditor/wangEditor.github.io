@@ -702,7 +702,7 @@ window.___EXT(function (E, $) {
 
         var txt = this.txt.$txt.get(0);
 
-        while (elem && txt.contains(elem)) {
+        while (elem && txt !== elem && txt.contains(elem)) {
             if (matchesSelector.call(elem, selector)) {
                 // 符合 selector 查询条件
 
@@ -1075,12 +1075,14 @@ window.___EXT(function (E, $) {
         $domNormal.click(function (e) {
             if (!self.disabled()) {
                 clickEvent.call(self, e);
+                self.updateSelected();
             }
             e.preventDefault();
         });
         $domSelected.click(function (e) {
             if (!self.disabled()) {
                 clickEventSelected.call(self, e);
+                self.updateSelected();
             }
             e.preventDefault();
         });
@@ -1589,11 +1591,9 @@ window.___EXT(function (E, $) {
         });
 
         // 设置三角形 tip 的位置
-        if (marginLeft2 !== marginLeft) {
-            $triangle.css({
-                'margin-left': marginLeft2 - marginLeft - 5
-            });
-        }
+        $triangle.css({
+            'margin-left': marginLeft2 - marginLeft - 5
+        });
     };
 
     // focus 第一个 input
@@ -1808,10 +1808,12 @@ window.___EXT(function (E, $) {
             if (e.keyCode !== 8) {
                 return;
             }
-
-            if (!$.trim($txt.html())) {
+            var txtHtml = $.trim($txt.html());
+            // ff时用 txtHtml === '<br>' 判断，其他用 !txtHtml 判断
+            if (!txtHtml || txtHtml === '<br>') {
                 // 内容空了
                 $p = $('<p><br/></p>');
+                $txt.html(''); // 一定要先清空，否则在 ff 下有问题
                 $txt.append($p);
                 editor.restoreSelectionByElem($p.get(0));
             }
@@ -1988,11 +1990,14 @@ window.___EXT(function (E, $) {
         var $tip = $('<i class="height-tip"><i>');
         var isTipInTxt = false;
 
-        function addAndShowTip ($target) {
+        function addAndShowTip($target) {
             if (!isTipInTxt) {
                 $editorContainer.append($tip);
                 isTipInTxt = true;
             }
+
+            var txtTop = $txt.position().top;
+            var txtHeight = $txt.outerHeight();
 
             var height = $target.height();
             var top = $target.position().top;
@@ -2000,12 +2005,33 @@ window.___EXT(function (E, $) {
             var paddingTop = parseInt($target.css('padding-top'), 10);
             var marginBottom = parseInt($target.css('margin-bottom'), 10);
             var paddingBottom = parseInt($target.css('padding-bottom'), 10);
+
+            // 计算初步的结果
+            var resultHeight = height + paddingTop + marginTop + paddingBottom + marginBottom;
+            var resultTop = top + menuContainer.height();
+            
+            // var spaceValue;
+
+            // // 判断是否超出下边界
+            // spaceValue = (resultTop + resultHeight) - (txtTop + txtHeight);
+            // if (spaceValue > 0) {
+            //     resultHeight = resultHeight - spaceValue;
+            // }
+
+            // // 判断是否超出了下边界
+            // spaceValue = txtTop > resultTop;
+            // if (spaceValue) {
+            //     resultHeight = resultHeight - spaceValue;
+            //     top = top + spaceValue;
+            // }
+
+            // 按照最终结果渲染
             $tip.css({
                 height: height + paddingTop + marginTop + paddingBottom + marginBottom,
                 top: top + menuContainer.height()
             });
         }
-        function removeTip () {
+        function removeTip() {
             if (!isTipInTxt) {
                 return;
             }
@@ -3018,7 +3044,7 @@ window.___EXT(function (E, $) {
                         if ($item.get(0).nodeName === 'P') {
                             $quoteElem.after($item);
                         } else {
-                            $quoteElem.after('<p>' + $item.text() + '</0>');
+                            $quoteElem.after('<p>' + $item.text() + '</p>');
                         }
                         $lastChild = $item;  // 记录最后一个子元素，用于callback中的range定位
                     });
@@ -3655,7 +3681,7 @@ window.___EXT(function (E, $) {
         });
 
         // dropPanel 内容
-        var $content = $('<div style="font-size: 12px; color: #666; text-align:right;"></div>');
+        var $content = $('<div style="font-size: 14px; color: #666; text-align:right;"></div>');
         var $table = $('<table class="choose-table" style="margin-bottom:10px;margin-top:5px;">');
         var $row = $('<span>0</span>');
         var $rowspan = $('<span> 行 </span>');
@@ -3744,7 +3770,7 @@ window.___EXT(function (E, $) {
         // 创建 panel
         menu.dropPanel = new E.DropPanel(editor, menu, {
             $content: $content,
-            width: 141
+            width: 181
         });
 
         // 增加到editor对象中
@@ -4660,12 +4686,54 @@ window.___EXT(function (E, $) {
         var menuId = 'fullscreen';
         var lang = editor.config.lang;
 
+        var isSelected = false;
+        var txtHeight;
+
         // 创建 menu 对象
         var menu = new E.Menu({
             editor: editor,
             id: menuId,
             title: lang.fullscreen
         });
+
+        // 定义click事件
+        menu.clickEvent = function (e) {
+            // 增加样式
+            var $editorContainer = editor.$editorContainer;
+            $editorContainer.addClass('wangEditor-fullscreen');
+
+            // 记录高度
+            var $txt = editor.txt.$txt;
+            txtHeight = $txt.height();
+
+            // 重新设置高度
+            var menuContainer = editor.menuContainer;
+            $txt.height(E.$window.height() - menuContainer.height());
+
+            // 保存状态
+            isSelected = true;
+        };
+
+        // 定义选中状态的 click 事件
+        menu.clickEventSelected = function (e) {
+            // 取消样式
+            var $editorContainer = editor.$editorContainer;
+            $editorContainer.removeClass('wangEditor-fullscreen');
+
+            // 还原高度
+            var $txt = editor.txt.$txt;
+            if (txtHeight) {
+                $txt.height(txtHeight);
+            }
+
+            // 保存状态
+            isSelected = false;
+        };
+
+        // 定义选中事件
+        menu.updateSelectedEvent = function (e) {
+            return isSelected;
+        };
 
         // 增加到editor对象中
         editor.menus[menuId] = menu;
@@ -4793,7 +4861,7 @@ window.___EXT(function (E, $) {
         txt.updateMenuStyleEvent();
 
         // 鼠标hover时，显示 p head 高度（暂时关闭这个功能）
-        // txt.showHeightOnHover();
+        txt.showHeightOnHover();
 
     };
 

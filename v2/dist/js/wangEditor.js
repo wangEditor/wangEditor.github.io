@@ -5476,8 +5476,8 @@ _e(function (E, $) {
                 } else {
                     alert('上传成功，图片为 ' + window.URL.createObjectURL(file));
                 }
-                return;
             }
+            return;
         }
         // ------------ end 预览模拟上传 ------------
 
@@ -5766,6 +5766,7 @@ _e(function (E, $) {
                     if (location.hostname.toLowerCase() === 'wangeditor.github.io') {
                         E.log('预览模拟上传');
                         insertImg(base64);
+                        return;
                     }
                     // ------------ end 预览模拟上传 ------------
 

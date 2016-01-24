@@ -105,6 +105,19 @@
             }
         }
     }
+    // 图品拖拽大小
+    .img-drag-point {
+        display: block;
+        position: absolute;
+        width: 12px;
+        height: 12px;
+        border-radius: 50%;
+        cursor: se-resize;
+        background-color: @fore-color;
+        margin-left: -6px;
+        margin-top: -6px;
+        box-shadow: 1px 1px 5px #999;
+    }
 }
 .wangEditor-fullscreen {
     position: fixed;
@@ -127,6 +140,7 @@
     width: 100%;
     border-bottom: 1px\9 solid\9 #f1f1f1\9;
     box-shadow: 0 1px 3px #999;
+    background-color: #fff;
     
     a {
         text-decoration: none;
@@ -186,7 +200,7 @@
         text-align: center;
         background-color: @fore-color;
         color: #fff;
-        padding: 7px 5px;
+        padding: 7px 0;
         font-size: 12px;
         top: 100%;
         left: 50%;

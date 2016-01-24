@@ -1030,16 +1030,33 @@ _e(function (E, $) {
     };
     Menu.fn._renderTip = function ($menuItem) {
         var self = this;
+        var editor = self.editor;
         var title = self.title;
         var $tip = $('<div class="menu-tip"></div>');
         // var $triangle = $('<i class="tip-triangle"></i>'); // 小三角
 
-        // 不同title长度，需要不同宽度的tip
-        if (title && title.length <= 2) {
-            $tip.addClass('menu-tip-40');
-        }
-        if (title && title.length === 3) {
-            $tip.addClass('menu-tip-50');
+        // 计算 tip 宽度
+        var $tempDiv;
+        if (!self.tipWidth) {
+            $tempDiv = $('<p style="opacity:0; filter:Alpha(opacity=0); position:absolute;">' + title + '</p>');
+            editor.$editorContainer.append($tempDiv);
+            editor.ready(function () {
+                var editor = this;
+                var titleWidth = $tempDiv.outerWidth() + 5; // 多出 5px 的冗余
+                var currentWidth = $tip.outerWidth();
+                var currentMarginLeft = parseFloat($tip.css('margin-left'), 10);
+                $tempDiv.remove();
+                $tempDiv = null;
+
+                // 重新设置样式
+                $tip.css({
+                    width: titleWidth,
+                    'margin-left': currentMarginLeft + (currentWidth - titleWidth)/2
+                });
+
+                // 存储
+                self.tipWidth = titleWidth;
+            });
         }
 
         // $tip.append($triangle);
@@ -2234,6 +2251,7 @@ _e(function (E, $) {
 _e(function (E, $) {
     E.langs = {};
     
+    // 中文
     E.langs['zh-cn'] = {
         bold: '粗体',
         underline: '下划线',
@@ -2274,6 +2292,48 @@ _e(function (E, $) {
         redo: '重复',
         fullscreen: '全屏'
     };
+
+    // 英文
+    E.langs.en = {
+        bold: 'Bold',
+        underline: 'Underline',
+        italic: 'Italic',
+        forecolor: 'Color',
+        bgcolor: 'Backcolor',
+        strikethrough: 'Strikethrough',
+        eraser: 'Eraser',
+        source: 'Codeview',
+        quote: 'Quote',
+        fontfamily: 'Font family',
+        fontsize: 'Font size',
+        head: 'Head',
+        orderlist: 'Ordered list',
+        unorderlist: 'Unordered list',
+        alignleft: 'Align left',
+        aligncenter: 'Align center',
+        alignright: 'Align right',
+        link: 'Insert link',
+        text: 'Text',
+        submit: 'Submit',
+        cancel: 'Cancel',
+        unlink: 'Unlink',
+        table: 'Table',
+        emotion: 'Emotions',
+        img: 'Image',
+        vedio: 'Vedio',
+        'width': 'width',
+        'height': 'height',
+        location: 'Location',
+        loading: 'Loading',
+        searchlocation: 'search',
+        dynamicMap: 'Dynamic',
+        clearLocation: 'Clear',
+        langDynamicOneLocation: 'Only one location in dynamic map',
+        insertcode: 'Insert Code',
+        undo: 'Undo',
+        redo: 'Redo',
+        fullscreen: 'Full screnn'
+    };
 });
 // 全局配置
 _e(function (E, $) {
@@ -2282,6 +2342,9 @@ _e(function (E, $) {
 
     // 是否打印log
     E.config.printLog = true;
+
+    // 菜单吸顶：false - 不吸顶；number - 吸顶，值为top值
+    E.config.menuFixed = 0;
 
     // 编辑器允许的标签
     E.config.legalTags = 'p,h1,h2,h3,h4,h5,h6,blockquote,table,ul,ol,pre';
@@ -2354,7 +2417,7 @@ _e(function (E, $) {
     ];
 
     E.config.fontsizes = {
-        // 'value': 'title'
+        // 格式：'value': 'title'
         1: '10px',
         2: '13px',
         3: '16px',
@@ -2370,56 +2433,56 @@ _e(function (E, $) {
             title: '默认',
             size: 18,
             imgs: [
-                'http://wangeditor.github.io/expressions/1.gif',
-                'http://wangeditor.github.io/expressions/2.gif',
-                'http://wangeditor.github.io/expressions/3.gif',
-                'http://wangeditor.github.io/expressions/4.gif',
-                'http://wangeditor.github.io/expressions/5.gif',
-                'http://wangeditor.github.io/expressions/6.gif',
-                'http://wangeditor.github.io/expressions/7.gif',
-                'http://wangeditor.github.io/expressions/8.gif',
-                'http://wangeditor.github.io/expressions/9.gif',
-                'http://wangeditor.github.io/expressions/10.gif',
-                'http://wangeditor.github.io/expressions/11.gif',
-                'http://wangeditor.github.io/expressions/12.gif',
-                'http://wangeditor.github.io/expressions/13.gif',
-                'http://wangeditor.github.io/expressions/14.gif',
-                'http://wangeditor.github.io/expressions/15.gif',
-                'http://wangeditor.github.io/expressions/16.gif',
-                'http://wangeditor.github.io/expressions/17.gif',
-                'http://wangeditor.github.io/expressions/18.gif',
-                'http://wangeditor.github.io/expressions/19.gif',
-                'http://wangeditor.github.io/expressions/20.gif',
-                'http://wangeditor.github.io/expressions/21.gif',
-                'http://wangeditor.github.io/expressions/22.gif',
-                'http://wangeditor.github.io/expressions/23.gif',
-                'http://wangeditor.github.io/expressions/24.gif',
-                'http://wangeditor.github.io/expressions/25.gif',
-                'http://wangeditor.github.io/expressions/26.gif',
-                'http://wangeditor.github.io/expressions/27.gif',
-                'http://wangeditor.github.io/expressions/28.gif',
-                'http://wangeditor.github.io/expressions/29.gif',
-                'http://wangeditor.github.io/expressions/30.gif',
-                'http://wangeditor.github.io/expressions/31.gif',
-                'http://wangeditor.github.io/expressions/32.gif',
-                'http://wangeditor.github.io/expressions/33.gif',
-                'http://wangeditor.github.io/expressions/34.gif',
-                'http://wangeditor.github.io/expressions/35.gif',
-                'http://wangeditor.github.io/expressions/36.gif',
-                'http://wangeditor.github.io/expressions/37.gif',
-                'http://wangeditor.github.io/expressions/38.gif',
-                'http://wangeditor.github.io/expressions/39.gif',
-                'http://wangeditor.github.io/expressions/40.gif',
-                'http://wangeditor.github.io/expressions/41.gif',
-                'http://wangeditor.github.io/expressions/42.gif',
-                'http://wangeditor.github.io/expressions/43.gif',
-                'http://wangeditor.github.io/expressions/44.gif',
-                'http://wangeditor.github.io/expressions/45.gif',
-                'http://wangeditor.github.io/expressions/46.gif',
-                'http://wangeditor.github.io/expressions/47.gif',
-                'http://wangeditor.github.io/expressions/48.gif',
-                'http://wangeditor.github.io/expressions/49.gif',
-                'http://wangeditor.github.io/expressions/50.gif'
+                '../static/emotions/default/1.gif',
+                '../static/emotions/default/2.gif',
+                '../static/emotions/default/3.gif',
+                '../static/emotions/default/4.gif',
+                '../static/emotions/default/5.gif',
+                '../static/emotions/default/6.gif',
+                '../static/emotions/default/7.gif',
+                '../static/emotions/default/8.gif',
+                '../static/emotions/default/9.gif',
+                '../static/emotions/default/10.gif',
+                '../static/emotions/default/11.gif',
+                '../static/emotions/default/12.gif',
+                '../static/emotions/default/13.gif',
+                '../static/emotions/default/14.gif',
+                '../static/emotions/default/15.gif',
+                '../static/emotions/default/16.gif',
+                '../static/emotions/default/17.gif',
+                '../static/emotions/default/18.gif',
+                '../static/emotions/default/19.gif',
+                '../static/emotions/default/20.gif',
+                '../static/emotions/default/21.gif',
+                '../static/emotions/default/22.gif',
+                '../static/emotions/default/23.gif',
+                '../static/emotions/default/24.gif',
+                '../static/emotions/default/25.gif',
+                '../static/emotions/default/26.gif',
+                '../static/emotions/default/27.gif',
+                '../static/emotions/default/28.gif',
+                '../static/emotions/default/29.gif',
+                '../static/emotions/default/30.gif',
+                '../static/emotions/default/31.gif',
+                '../static/emotions/default/32.gif',
+                '../static/emotions/default/33.gif',
+                '../static/emotions/default/34.gif',
+                '../static/emotions/default/35.gif',
+                '../static/emotions/default/36.gif',
+                '../static/emotions/default/37.gif',
+                '../static/emotions/default/38.gif',
+                '../static/emotions/default/39.gif',
+                '../static/emotions/default/40.gif',
+                '../static/emotions/default/41.gif',
+                '../static/emotions/default/42.gif',
+                '../static/emotions/default/43.gif',
+                '../static/emotions/default/44.gif',
+                '../static/emotions/default/45.gif',
+                '../static/emotions/default/46.gif',
+                '../static/emotions/default/47.gif',
+                '../static/emotions/default/48.gif',
+                '../static/emotions/default/49.gif',
+                '../static/emotions/default/50.gif'
             ]
         },
         'jinxing': {
@@ -2447,9 +2510,6 @@ _e(function (E, $) {
 
     // 是否过滤粘贴内容
     E.config.pasteFilter = true;
-
-    // placeholder
-    E.config.placeholder = '请输入内容...';
      
 });
 // 全局UI
@@ -3988,23 +4048,12 @@ _e(function (E, $) {
         var lang = editor.config.lang;
         var configEmotions = editor.config.emotions;
 
-        var srcTestReg = new RegExp(E.website, 'i');
-        var useFreeEmotion = false; // 是否使用了官网免费的表情
-        var notWranSrc = true; // 尚未提示警告
-
         // 创建 menu 对象
         var menu = new E.Menu({
             editor: editor,
             id: menuId,
             title: lang.emotion
         });
-
-        // render 时执行事件
-        menu.onRender = function () {
-            if (useFreeEmotion) {
-                 E.warn('检测到有默认的表情图标，这样会影响网页加载速度。建议自定义配置表情图标，详情参考文档说明');
-            }
-        };
 
         // 拼接 dropPanel 内容
         var $panelContent = $('<div class="panel-tab"></div>');
@@ -4022,12 +4071,6 @@ _e(function (E, $) {
 
             // 添加表情图片
             $.each(imgs, function (k, src) {
-                // 提示自定义配置表情
-                if (srcTestReg.test(src) && notWranSrc) {
-                    useFreeEmotion = true; // 记录：使用了官网免费的表情，render时会提示
-                    notWranSrc = false;
-                }
-
                 var $command = $('<a href="#" commandValue="' + src + '"></a>');
                 var $img = $('<img>');
                 $img.css({
@@ -4084,18 +4127,19 @@ _e(function (E, $) {
             dropPanel.show();
 
             // 异步加载图片
-
             if (menu.imgLoaded) {
                 return;
-            } else {
-                menu.imgLoaded = true;
             }
-
             $contentContainer.find('img').each(function () {
                 var $img = $(this);
-                $img.attr('src', $img.attr('_src'));
+                var _src = $img.attr('_src');
+                $img.on('error', function () {
+                    E.error('加载不出表情图片 ' + _src);
+                });
+                $img.attr('src', _src);
                 $img.removeAttr('_src');
             });
+            menu.imgLoaded = true;
         };
 
         // 增加到editor对象中
@@ -5070,8 +5114,14 @@ _e(function (E, $) {
             var menuContainer = editor.menuContainer;
             $txt.height(E.$window.height() - menuContainer.height());
 
+            // 取消menuContainer的内联样式（menu吸顶时，会为 menuContainer 设置一些内联样式）
+            editor.menuContainer.$menuContainer.attr('style', '');
+
             // 保存状态
             isSelected = true;
+
+            // 记录编辑器是否全屏
+            editor.isFullScreen = true;
         };
 
         // 定义选中状态的 click 事件
@@ -5088,6 +5138,9 @@ _e(function (E, $) {
 
             // 保存状态
             isSelected = false;
+
+            // 记录编辑器是否全屏
+            editor.isFullScreen = false;
         };
 
         // 定义选中事件
@@ -5755,10 +5808,12 @@ _e(function (E, $) {
         var editor = this;
         var txt = editor.txt;
         var $txt = txt.$txt;
+        var $editorContainer = editor.$editorContainer;
         var $currentImg;
 
         // 用到的dom节点
         var isRendered = false;
+        var $dragPoint = $('<div class="img-drag-point"></div>');
         var $toolbar = $('<div class="txt-toolbar"></div>');
         var $triangle = $('<div class="tip-triangle"></div>');
         var $delete = $('<a href="#"><i class="wangeditor-menu-img-trash-o"></i></a>');
@@ -5775,7 +5830,8 @@ _e(function (E, $) {
             }
             
             // 绑定事件
-            bindEvent();
+            bindToolbarEvent();
+            bindDragEvent();
 
             // 拼接 渲染到页面上
             $toolbar.append($triangle)
@@ -5785,12 +5841,12 @@ _e(function (E, $) {
                     .append($floatLeft)
                     .append($noFloat)
                     .append($floatRight);
-            editor.$editorContainer.append($toolbar);
+            editor.$editorContainer.append($toolbar).append($dragPoint);
             isRendered = true;
         }
 
-        // 绑定事件
-        function bindEvent() {
+        // 绑定toolbar事件
+        function bindToolbarEvent() {
             // 统一执行命令的方法
             var commandFn;
             function command(e, callback) {
@@ -5884,6 +5940,72 @@ _e(function (E, $) {
             });
         }
 
+        // 绑定drag事件
+        function bindDragEvent() {
+            var _x, _y;
+            var dragMarginLeft, dragMarginTop;
+            var imgWidth, imgHeight;
+
+            function mousemove(e) {
+                var diffX, diffY;
+
+                // 计算差额
+                diffX = e.pageX - _x;
+                diffY = e.pageY - _y;
+
+                // --------- 计算拖拽点的位置 ---------
+                var currentDragMarginLeft = dragMarginLeft + diffX;
+                var currentDragMarginTop = dragMarginTop + diffY;
+                $dragPoint.css({
+                    'margin-left': currentDragMarginLeft,
+                    'margin-top': currentDragMarginTop
+                });
+
+                // --------- 计算图片的大小 ---------
+                var currentImgWidth = imgWidth + diffX;
+                var currentImggHeight = imgHeight + diffY;
+                $currentImg.css({
+                    width: currentImgWidth,
+                    height: currentImggHeight
+                });
+            }
+
+            $dragPoint.on('mousedown', function(e){
+                if (!$currentImg) {
+                    return;
+                }
+                // 当前鼠标位置
+                _x = e.pageX;
+                _y = e.pageY;
+
+                // 当前拖拽点的位置
+                dragMarginLeft = parseFloat($dragPoint.css('margin-left'), 10);
+                dragMarginTop = parseFloat($dragPoint.css('margin-top'), 10);
+
+                // 当前图片的大小
+                imgWidth = $currentImg.width();
+                imgHeight = $currentImg.height();
+
+                // 隐藏 $toolbar
+                $toolbar.hide();
+
+                // 绑定计算事件
+                E.$body.on('mousemove._dragResizeImg', mousemove);
+                E.$body.on('mouseup._dragResizeImg', function (e) {
+                    // 取消绑定
+                    E.$body.off('mousemove._dragResizeImg');
+                    E.$body.off('mouseup._dragResizeImg');
+
+                    // 隐藏，并还原拖拽点的位置
+                    hide();
+                    $dragPoint.css({
+                        'margin-left': dragMarginLeft,
+                        'margin-top': dragMarginTop
+                    });
+                });
+            });
+        }
+
         // 显示 toolbar
         function show() {
             if ($currentImg == null) {
@@ -5895,6 +6017,13 @@ _e(function (E, $) {
             var imgLeft = imgPosition.left;
             var imgHeight = $currentImg.outerHeight();
             var imgWidth = $currentImg.outerWidth();
+
+            // --- 定位 dragpoint ---
+            $dragPoint.css({
+                top: imgTop + imgHeight,
+                left: imgLeft + imgWidth
+            });
+            $dragPoint.show();
 
             // --- 定位 toolbar ---
 
@@ -5923,6 +6052,9 @@ _e(function (E, $) {
                 left: left,
                 'margin-left': marginLeft
             });
+
+            // disable 菜单
+            editor.disableMenusExcept();
         }
         
         // 隐藏 toolbar
@@ -5932,7 +6064,12 @@ _e(function (E, $) {
             }
             $currentImg.removeClass('clicked');
             $currentImg = null;
+
             $toolbar.hide();
+            $dragPoint.hide();
+
+            // enable 菜单
+            editor.enableMenusExcept();
         }
 
         // 判断img是否是一个表情
@@ -5984,9 +6121,6 @@ _e(function (E, $) {
             e.stopPropagation();
             
         }).on('click keypress scroll', function (e) {
-            setTimeout(hide, 100);
-        });
-        E.$body.on('click keypress scroll', function (e) {
             setTimeout(hide, 100);
         });
 
@@ -6149,6 +6283,74 @@ _e(function (E, $) {
         });
         E.$body.on('click keypress scroll', function (e) {
             setTimeout(hide, 100);
+        });
+    });
+
+})(window, window.wangEditor, window.jQuery);
+// menu吸顶
+(function (window, E, $) {
+
+    E.ready(function () {
+        var editor = this;
+        var menuFixed = editor.config.menuFixed;
+        if (menuFixed === false || typeof menuFixed !== 'number') {
+            // 没有配置菜单吸顶
+            return;
+        }
+        var bodyMarginTop = parseFloat(E.$body.css('margin-top'), 10);
+        if (isNaN(bodyMarginTop)) {
+            bodyMarginTop = 0;
+        }
+
+        var $editorContainer = editor.$editorContainer;
+        var editorTop = $editorContainer.offset().top;
+        var editorHeight = $editorContainer.outerHeight();
+
+        var $menuContainer = editor.menuContainer.$menuContainer;
+        var menuCssPosition = $menuContainer.css('position');
+        var menuCssTop = $menuContainer.css('top');
+        var menuWidth = $menuContainer.width();
+        var menuHeight = $menuContainer.outerHeight();
+        var menuTop = $menuContainer.offset().top;
+
+        var $txt = editor.txt.$txt;
+
+        E.$window.scroll(function () {
+            //全屏模式不支持
+            if (editor.isFullScreen) {
+                return;
+            }
+
+            var sTop = $(window).scrollTop();
+            if (sTop >= menuTop && sTop + menuFixed + menuHeight + 30 < editorTop + editorHeight) {
+                // 吸顶
+                $menuContainer.css({
+                    position: 'fixed',
+                    top: menuFixed
+                });
+
+                // 固定宽度
+                $menuContainer.width(menuWidth);
+
+                // 增加body margin-top
+                E.$body.css({
+                    'margin-top': bodyMarginTop + menuHeight
+                });
+            } else {
+                // 取消吸顶
+                $menuContainer.css({
+                    position: menuCssPosition,
+                    top: menuCssTop
+                });
+
+                // 取消宽度固定
+                $menuContainer.css('width', '100%');
+
+                // 还原 body margin-top
+                E.$body.css({
+                    'margin-top': bodyMarginTop
+                });
+            }
         });
     });
 

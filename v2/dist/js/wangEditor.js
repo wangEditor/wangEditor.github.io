@@ -2067,10 +2067,40 @@ _e(function (E, $) {
     Txt.fn.updateValueEvent = function () {
         var $txt = this.$txt;
         var editor = this.editor;
+        var timeoutId, oldValue;
+
+        // 触发 onchange 事件
+        function doOnchange() {
+            var val = $txt.html();
+            if (oldValue === val) {
+                // 无变化
+                return;
+            }
+
+            // 触发 onchange 事件
+            if (editor.onchange && typeof editor.onchange === 'function') {
+                editor.onchange.call(editor);
+            }
+
+            // 更新内容
+            editor.updateValue();
+
+            // 记录最新内容
+            oldValue = val;
+        }
 
         // txt change 时随时更新内容
         $txt.on(txtChangeEventNames, function (e) {
-            editor.updateValue();
+            // 初始化
+            if (oldValue == null) {
+                oldValue = $txt.html();
+            }
+
+            // 监控内容变化（停止操作 100ms 之后立即执行）
+            if (timeoutId) {
+                clearTimeout(timeoutId);
+            }
+            timeoutId = setTimeout(doOnchange, 100);
         });
     };
 
@@ -2345,6 +2375,9 @@ _e(function (E, $) {
 
     // 菜单吸顶：false - 不吸顶；number - 吸顶，值为top值
     E.config.menuFixed = 0;
+
+    // 编辑源码时，过滤 javascript
+    E.config.jsFilter = true;
 
     // 编辑器允许的标签
     E.config.legalTags = 'p,h1,h2,h3,h4,h5,h6,blockquote,table,ul,ol,pre';
@@ -3139,13 +3172,22 @@ _e(function (E, $) {
             var editor = self.editor;
             var $txt = editor.txt.$txt;
             var $code = self.$codeTextarea;
+            var value;
 
             if (!$code) {
                 return;
             }
 
+            // 取值
+            value = $code.val();
+            
+            if (editor.config.jsFilter) {
+                // 过滤js代码
+                value = value.replace(/<script[\s\S]*?<\/script>/ig, '');
+            }
+
             // 赋值
-            $txt.html($code.val());
+            $txt.html(value);
 
             // 渲染
             $code.after($txt).hide();
@@ -3200,7 +3242,6 @@ _e(function (E, $) {
                 return;
             }
             var currentQuote = editor.getSelfOrParentByName(rangeElem, 'blockquote');
-            var $currentQuote;
             var $quote;
 
             if (currentQuote) {
@@ -3210,6 +3251,14 @@ _e(function (E, $) {
             }
 
             rangeElem = editor.getLegalTags(rangeElem);
+            $rangeElem = $(rangeElem);
+
+            // 无文字，则不允许执行引用
+            if (!$rangeElem.text()) {
+                return;
+            }
+
+
             if (!rangeElem) {
                 // 执行默认命令
                 // IE8 下执行此处（不过，经测试代码无效，也不报错）
@@ -3219,7 +3268,6 @@ _e(function (E, $) {
 
             // 自定义command事件
             function commandFn() {
-                $rangeElem = $(rangeElem);
                 $quote = $('<p>' + $rangeElem.text() + '</p>');
                 $rangeElem.after($quote).remove();
                 $quote.wrap('<blockquote>');
@@ -3307,7 +3355,7 @@ _e(function (E, $) {
         // 增加到editor对象中
         editor.menus[menuId] = menu;
 
-        // 两次点击 enter 跳出引用
+        // --------------- 两次点击 enter 跳出引用 ---------------
         editor.ready(function () {
             var editor = this;
             var $txt = editor.txt.$txt;
@@ -3347,6 +3395,53 @@ _e(function (E, $) {
                 e.preventDefault();
 
             });
+        }); // editor.ready(
+
+        // --------------- 处理quote中无内容时不能删除的问题 ---------------
+        editor.ready(function () {
+            var editor = this;
+            var $txt = editor.txt.$txt;
+            var $rangeElem;
+
+            function commandFn() {
+                $rangeElem && $rangeElem.remove();
+            }
+            function callback() {
+                if (!$rangeElem) {
+                    return;
+                }
+                var $prev = $rangeElem.prev();
+                if ($prev.length) {
+                    // 有 prev 则定位到 prev 最后
+                    editor.restoreSelectionByElem($prev.get(0));
+                } else {
+                    // 无 prev 则初始化选区
+                    editor.initSelection();
+                }
+            }
+
+            $txt.on('keydown', function (e) {
+                if (e.keyCode !== 8) {
+                    // 不是 backspace 键
+                    return;
+                }
+
+                var rangeElem = editor.getRangeElem();
+                rangeElem = editor.getSelfOrParentByName(rangeElem, 'blockquote');
+                if (!rangeElem) {
+                    // 选区不是 quote
+                    return;
+                }
+                $rangeElem = $(rangeElem);
+
+                var text = $rangeElem.text();
+                if (text) {
+                    // quote 中还有内容
+                    return;
+                }
+                editor.customCommand(e, commandFn, callback);
+
+            }); // $txt.on
         }); // editor.ready(
     });
 
@@ -5319,8 +5414,17 @@ _e(function (E, $) {
 
         // 成功事件
         upfile.onSuccess = function (result) {
-            var html = '<img src="' + result + '" style="max-width:100%"/>';
-            editor.command(event, 'insertHtml', html);
+            var img = document.createElement('img');
+            img.onload = function () {
+                var html = '<img src="' + result + '" style="max-width:100%"/>';
+                editor.command(event, 'insertHtml', html);
+                img = null;
+            };
+            img.onerror = function () {
+                E.error('使用返回的结果获取图片，发生错误。请确认以下结果是否正确：' + result);
+                img = null;
+            };
+            img.src = result;
         };
 
         // 失败事件
@@ -5596,7 +5700,7 @@ _e(function (E, $) {
         var $form = $('<form enctype="multipart/form-data" method="post" action="' + uploadUrl + '" target="' + iframeId + '"></form>');
         var $container = $('<div style="display:none;"></div>');
 
-        $form.append($input).append($('<input type="submit" value="Submit"/>'));
+        $form.append($input).append($('<input type="submit"/>'));
         $container.append($form);
         $container.append($iframe);
         E.$body.append($container);
@@ -5719,12 +5823,20 @@ _e(function (E, $) {
                 return;
             }
 
-            function insertImg(src) {
-                var html = '<img src="' + src + '" style="max-width:100%;"/>';
-                //执行插入
-                editor.command(pasteEvent, 'insertHtml', html);
+            function insertImg (src) {
+                var img = document.createElement('img');
+                img.onload = function () {
+                    var html = '<img src="' + src + '" style="max-width:100%;"/>';
+                    editor.command(pasteEvent, 'insertHtml', html);
 
-                E.log('已插入图片，地址 ' + src);
+                    E.log('已插入图片，地址 ' + src);
+                    img = null;
+                };
+                img.onerror = function () {
+                    E.error('使用返回的结果获取图片，发生错误。请确认以下结果是否正确：' + src);
+                    img = null;
+                };
+                img.src = src;
             }
 
             $.each(items, function (key, value) {
@@ -6024,7 +6136,6 @@ _e(function (E, $) {
                 top: imgTop + imgHeight,
                 left: imgLeft + imgWidth
             });
-            $dragPoint.show();
 
             // --- 定位 toolbar ---
 
@@ -6038,6 +6149,9 @@ _e(function (E, $) {
             if (top > (txtTop + txtHeight)) {
                 // top 不得超出编辑范围
                 top = txtTop + txtHeight;
+            } else {
+                // top 超出编辑范围，dragPoint就不显示了
+                $dragPoint.show();
             }
 
             // 显示（方便计算 margin）

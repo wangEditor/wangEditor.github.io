@@ -156,7 +156,8 @@ var nativeShare = function (config) {
             '' - 更多
         */
         var self = this;
-        document.getElementById(id).onclick = function () {
+        document.getElementById(id).onclick = function (e) {
+            e.preventDefault()
             self.share(app);
         };
     }

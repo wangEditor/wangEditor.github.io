@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>wangEditor2 test</title>
-    <link rel="stylesheet" type="text/css" href="../static/highlightjs/github.css">
     <link rel="stylesheet" type="text/css" href="../dist/css/wangEditor.min.css">
     <style type="text/css">
         #div1 {
@@ -13,19 +12,47 @@
         .container {
             position: relative;
         }
+
+        .wangEditor-container .wangEditor-txt blockquote {
+          display: block;
+          border: 1px solid #003399;
+          border-left: 8px solid #003399;
+          padding: 5px 10px;
+          margin: 10px 0;
+          line-height: 1.4;
+          font-size: 100%;
+          background-color: #fff;
+        }
+        .wangEditor-container .wangEditor-txt table {
+          border: none;
+          border-collapse: collapse;
+        }
+        .wangEditor-container .wangEditor-txt table td,
+        .wangEditor-container .wangEditor-txt table th {
+          border: 1px solid #003399;
+          padding: 3px 5px;
+          min-width: 50px;
+          height: 20px;
+        }
+        .wangEditor-container .wangEditor-txt pre {
+          border: 1px solid #003399;
+          background-color: #fff;
+          padding: 10px;
+          margin: 5px 0px;
+          font-size: 0.8em;
+          border-radius: 3px;
+        }
+
     </style>
 </head>
 <body style="padding:0 20px;">
-    <p>wangEditor2.0.0 测试版 demo，支持 IE8 浏览器</p>
+    <p>wangEditor2.0.0 自定义编辑区域内容的样式</p>
     <div class="container">
         <div id="div1">
         <!-- <textarea id="div1"> -->
             <h3>标题标题1</h3>
-            <p><img src="http://images2015.cnblogs.com/blog/590867/201601/590867-20160122172034078-1794639133.png"></p>
-            <p>请输入内容222</p>
-            <p><img src="../static/emotions/jinxing/4.gif"></p>
+            <blockquote><p>请输入内容222</p></blockquote>            
             <p><a href="#">链接链接</a></p>
-            <p>请输入内容</p>
             <pre style="max-width:100%;overflow-x:auto;"><code>var a = 'a';
 var b = 'b';</code></pre>
             <p>请输入内容</p>
@@ -59,29 +86,11 @@ var b = 'b';</code></pre>
     
     
     <script type="text/javascript" src="../dist/js/lib/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="../static/highlightjs/highlight.pack.js"></script>
     <script type="text/javascript" src="../dist/js/wangEditor.js"></script>
     <script type="text/javascript">
         $(function () {
-
-            // 阻止输出log
-            // wangEditor.config.printLog = false;
-            
             var editor = new wangEditor('div1');
-
-            // 上传图片
-            editor.config.uploadImgUrl = '/upload';
-
-            // onchange 事件
-            // editor.onchange = function () {
-            //     console.log(this.txt.$txt.html());
-            // };
-
-            // 取消过滤js
-            // editor.config.jsFilter = false;
-
             editor.create();
-
         });
     </script>
 </body>

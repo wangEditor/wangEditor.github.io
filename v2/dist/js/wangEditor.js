@@ -69,6 +69,7 @@ var define;
 
 
     E.$body = $('body');
+    E.$document = $(document);
     E.$window = $(window);
     E.userAgent = navigator.userAgent;
     E.getComputedStyle = window.getComputedStyle;
@@ -601,6 +602,9 @@ _e(function (E, $) {
             return;
         }
 
+        // 记录内容，以便撤销（执行命令之前就要记录）
+        editor.undoRecord();
+
         // 恢复选区（有 range 参数）
         this.restoreSelection(range);
 
@@ -625,9 +629,6 @@ _e(function (E, $) {
 
         // 更新菜单样式
         editor.updateMenuStyle();
-
-        // 记录内容，以便撤销
-        editor.undoRecord();
 
         // 隐藏 dropPanel dropList modal  设置 200ms 间隔
         function hidePanelAndModal() {
@@ -785,6 +786,12 @@ _e(function (E, $) {
     E.fn.undoRecord = function () {
         var editor = this;
         var $txt = editor.txt.$txt;
+        var val = $txt.html();
+        var currentVal = undoList.length ? undoList[0] : '';
+
+        if (val === currentVal) {
+            return;
+        }
 
         // 清空 redolist
         if (redoList.length) {
@@ -4514,6 +4521,11 @@ _e(function (E, $) {
 // location 菜单
 _e(function (E, $) {
 
+    // 判断浏览器的 input 是否支持 keyup
+    var inputKeyup = (function (input) {
+        return 'onkeyup' in input;
+    })(document.createElement('input'));
+
     // 百度地图的key
     E.baiduMapAk = 'TVhjYjq1ICT2qqL5LdS8mwas';
 
@@ -4614,19 +4626,51 @@ _e(function (E, $) {
                 if (E.placeholder) {
                     $searchInput.focus();
                 }
-                // 并绑定搜索事件
-                var timeoutId;
-                function search(e) {
-                    if (e.type === 'keyup' && e.keyCode === 13) {
-                        e.preventDefault();
-                    }
-                    if (timeoutId) {
-                        clearTimeout(timeoutId);
-                    }
-                    timeoutId = setTimeout(mapData.searchMap, 500);
+                var timeoutId, searchFn;
+                if (inputKeyup) {
+                   // 并绑定搜索事件 - input 支持 keyup
+                   searchFn = function (e) {
+                       if (e.type === 'keyup' && e.keyCode === 13) {
+                           e.preventDefault();
+                       }
+                       if (timeoutId) {
+                           clearTimeout(timeoutId);
+                       }
+                       timeoutId = setTimeout(mapData.searchMap, 500);
+                   };
+                   $cityInput.on('keyup change paste', searchFn);
+                   $searchInput.on('keyup change paste', searchFn); 
+                } else {
+                    // 并绑定搜索事件 - input 不支持 keyup
+                    searchFn = function () {
+                        if (!$content.is(':visible')) {
+                            // panel 不显示了，就不用再监控了
+                            clearTimeout(timeoutId);
+                            return;
+                        }
+
+                        var currentCity = '';
+                        var currentSearch = '';
+                        var city = $cityInput.val();
+                        var search = $searchInput.val();
+
+                        if (city !== currentCity || search !== currentSearch) {
+                            // 刚获取的数据和之前的数据不一致，执行查询
+                            mapData.searchMap();
+                            // 更新数据
+                            currentCity = city;
+                            currentSearch = search;
+                        }
+
+                        // 继续监控
+                        if (timeoutId) {
+                            clearTimeout(timeoutId);
+                        }
+                        timeoutId = setTimeout(searchFn, 1000);
+                    };
+                    // 开始监控
+                    timeoutId = setTimeout(searchFn, 1000);
                 }
-                $cityInput.on('keyup change paste', search);
-                $searchInput.on('keyup change paste', search);
             }
             var myCity = new BMap.LocalCity();
             myCity.get(locationFun);
@@ -6103,11 +6147,11 @@ _e(function (E, $) {
                 $toolbar.hide();
 
                 // 绑定计算事件
-                E.$body.on('mousemove._dragResizeImg', mousemove);
-                E.$body.on('mouseup._dragResizeImg', function (e) {
+                E.$document.on('mousemove._dragResizeImg', mousemove);
+                E.$document.on('mouseup._dragResizeImg', function (e) {
                     // 取消绑定
-                    E.$body.off('mousemove._dragResizeImg');
-                    E.$body.off('mouseup._dragResizeImg');
+                    E.$document.off('mousemove._dragResizeImg');
+                    E.$document.off('mouseup._dragResizeImg');
 
                     // 隐藏，并还原拖拽点的位置
                     hide();
@@ -6208,7 +6252,9 @@ _e(function (E, $) {
         }
 
         // click img 事件
-        $txt.on('click', 'img', function (e) {
+        $txt.on('mousedown', 'img', function (e) {
+            e.preventDefault();
+        }).on('click', 'img', function (e) {
             var $img = $(e.currentTarget);
             var src = $img.attr('src');
 

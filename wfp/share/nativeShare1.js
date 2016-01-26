@@ -36,11 +36,13 @@ var nativeShare = function (config) {
         QZone: ['kQZone', 'QZone', '3', 'QQ空间']
     };
 
-    this.share = function (to_app) {
+    this.share = function (to_app, e) {
         if (!this.isQQUC) {
-            // 仅支持QQ或者UC浏览器
+            // 不是QQ或者UC浏览器，则忽略，不阻止执行默认命令
             return;
         }
+        // 是QQ和UC浏览器，首先阻止默认行为，再进行app分享
+        e.preventDefault();
         var title = this.title, url = this.url, desc = this.desc, img = this.img, img_title = this.img_title, from = this.from;
         if (isucBrowser) {
             to_app = to_app == '' ? '' : (platform_os == 'iPhone' ? this.ucAppList[to_app][0] : this.ucAppList[to_app][1]);
@@ -157,8 +159,7 @@ var nativeShare = function (config) {
         */
         var self = this;
         document.getElementById(id).onclick = function (e) {
-            e.preventDefault()
-            self.share(app);
+            self.share(app, e);
         };
     }
 

@@ -250,10 +250,12 @@ _e(function (E, $) {
         opt = opt === 'start' ? true : false;
 
         range = range || this.currentRange();
-        range.collapse(opt);
-
-        // 保存
-        this.currentRange(range);
+        
+        if (range) {
+            // 合并，保存
+            range.collapse(opt);
+            this.currentRange(range);
+        }
     };
 
     // 获取选区的文字
@@ -308,9 +310,8 @@ _e(function (E, $) {
                 _parentElem = range.commonAncestorContainer;
             }
         }
-
         // 确定父元素一定要包含在编辑器区域内
-        if (_parentElem && (txt.contains(_parentElem) || txt === _parentElem) ) {
+        if (_parentElem && ($.contains(txt, _parentElem) || txt === _parentElem) ) {
             // 保存选择区域
             self.currentRange(range);
         }
@@ -375,7 +376,7 @@ _e(function (E, $) {
     E.fn.setRangeByElem = ieRange ? emptyFn : function (elem) {
         var editor = this;
         var txtElem = editor.txt.$txt.get(0);
-        if (!elem || !txtElem.contains(elem)) {
+        if (!elem || !$.contains(txtElem, elem)) {
             return;
         }
 
@@ -479,7 +480,7 @@ _e(function (E, $) {
         }
 
         // 确定父元素一定要包含在编辑器区域内
-        if (_parentElem && (txt.contains(_parentElem) || txt === _parentElem) ) {
+        if (_parentElem && ($.contains(txt, _parentElem) || txt === _parentElem) ) {
             // 保存选择区域
             self.currentRange(range);
         }
@@ -505,7 +506,13 @@ _e(function (E, $) {
         }
         
         if(currentRange.text.length === 0){
-            range.collapse(false);
+            try {
+                // IE8 插入表情会报错
+                range.collapse(false);
+            } catch (ex) {
+                
+            }
+            
         }else{
             range.setEndPoint('StartToStart', currentRange);
         }
@@ -601,7 +608,6 @@ _e(function (E, $) {
             e && e.preventDefault();
             return;
         }
-
         // 记录内容，以便撤销（执行命令之前就要记录）
         editor.undoRecord();
 
@@ -730,7 +736,7 @@ _e(function (E, $) {
 
         var txt = this.txt.$txt.get(0);
 
-        while (elem && txt !== elem && txt.contains(elem)) {
+        while (elem && txt !== elem && $.contains(txt, elem)) {
             if (matchesSelector.call(elem, selector)) {
                 // 符合 selector 查询条件
 
@@ -1372,12 +1378,12 @@ _e(function (E, $) {
                 menuDom = menu.$domNormal.get(0);
             }
 
-            if (menuDom === trigger || menuDom.contains(trigger)) {
+            if (menuDom === trigger || $.contains(menuDom, trigger)) {
                 // 说明由本菜单点击触发的
                 return;
             }
 
-            if (thisList === trigger || thisList.contains(trigger)) {
+            if (thisList === trigger || $.contains(thisList, trigger)) {
                 // 说明由本list点击触发的
                 return;
             }
@@ -1571,12 +1577,12 @@ _e(function (E, $) {
                 menuDom = menu.$domNormal.get(0);
             }
 
-            if (menuDom === trigger || menuDom.contains(trigger)) {
+            if (menuDom === trigger || $.contains(menuDom, trigger)) {
                 // 说明由本菜单点击触发的
                 return;
             }
 
-            if (thisPanle === trigger || thisPanle.contains(trigger)) {
+            if (thisPanle === trigger || $.contains(thisPanle, trigger)) {
                 // 说明由本panel点击触发的
                 return;
             }
@@ -4688,7 +4694,12 @@ _e(function (E, $) {
             var script = document.createElement("script");
             script.type = "text/javascript";
             script.src = "http://api.map.baidu.com/api?v=2.0&ak=" + ak + "&callback=baiduMapCallBack";  // baiduMapCallBack是一个本地函数
-            document.body.appendChild(script);
+            try {
+                // IE10- 报错
+                document.body.appendChild(script);
+            } catch (ex) {
+                E.error('加载地图过程中发生错误');
+            }
         };
 
         // 初始化地图
@@ -4844,10 +4855,10 @@ _e(function (E, $) {
                 //插入iframe
                 iframe = '<iframe class="ueditor_baidumap" src="{src}" frameborder="0" width="' + sizeWidth + '" height="' + sizeHeight + '"></iframe>';
                 iframe = iframe.replace('{src}', src);
-                editor.command(e, 'insertHTML', iframe, callback);
+                editor.command(e, 'insertHtml', iframe, callback);
             }else{
                 //插入图片
-                editor.command(e, 'insertHTML', '<img style="max-width:100%;" src="' + src + '"/>', callback);
+                editor.command(e, 'insertHtml', '<img style="max-width:100%;" src="' + src + '"/>', callback);
             }
         });
 
@@ -4897,11 +4908,28 @@ _e(function (E, $) {
 // insertcode 菜单
 _e(function (E, $) {
 
+    // 加载 highlightjs 代码
+    function loadHljs() {
+        if (E.userAgent.indexOf('MSIE 8') > 0) {
+            // 不支持 IE8
+            return;
+        }
+        var script = document.createElement("script");
+        script.type = "text/javascript";
+        script.src = "http://apps.bdimg.com/libs/highlight.js/9.1.0/highlight.min.js";
+        document.body.appendChild(script);
+    }
+    
+
     E.createMenu(function (check) {
         var menuId = 'insertcode';
         if (!check(menuId)) {
             return;
         }
+
+        // 加载 highlightjs 代码
+        setTimeout(loadHljs, 0);
+
         var editor = this;
         var lang = editor.config.lang;
         var $txt = editor.txt.$txt;
@@ -4927,6 +4955,20 @@ _e(function (E, $) {
             // 显示
             $textarea.val('');
             dropPanel.show();
+
+            // highlightjs 语言列表
+            var hljs = window.hljs;
+            if (hljs && hljs.listLanguages) {
+                $langSelect.css({
+                    'margin-top': '9px',
+                    'margin-left': '5px'
+                });
+                $.each(hljs.listLanguages(), function (key, lang) {
+                    $langSelect.append('<option value="' + lang + '">' + lang + '</option>');
+                });
+            } else {
+                $langSelect.hide();
+            }
         };
 
         // 选中状态下的 click 事件
@@ -4986,7 +5028,7 @@ _e(function (E, $) {
         // 创建 panel
         var $content = $('<div></div>');
         var $textarea = $('<textarea></textarea>');
-        var $langSelect;
+        var $langSelect = $('<select></select>');
         contentHandle($content);
         menu.dropPanel = new E.DropPanel(editor, menu, {
             $content: $content,
@@ -5023,22 +5065,8 @@ _e(function (E, $) {
             var $btnContainer = $('<div></div>');
             var $btnSubmit = $('<button class="right">' + lang.submit + '</button>');
             var $btnCancel = $('<button class="right gray">' + lang.cancel + '</button>');
-            
-            // highlightjs 语言列表
-            var hljs = window.hljs;
-            if (hljs && hljs.listLanguages) {
-                $langSelect = $('<select></select>');
-                $langSelect.css({
-                    'margin-top': '9px',
-                    'margin-left': '5px'
-                });
-                $.each(hljs.listLanguages(), function (key, lang) {
-                    $langSelect.append('<option value="' + lang + '">' + lang + '</option>');
-                });
-            }
 
-            $btnContainer.append($btnSubmit).append($btnCancel);
-            $langSelect && $btnContainer.append($langSelect);
+            $btnContainer.append($btnSubmit).append($btnCancel).append($langSelect);
             $content.append($btnContainer);
 
             // 取消按钮
@@ -5061,7 +5089,7 @@ _e(function (E, $) {
                 var doHightlight = function () {
                     $('pre code').each(function(i, block) {
                         if (window.hljs) {
-                            hljs.highlightBlock(block);
+                            window.hljs.highlightBlock(block);
                         }
                     });
                 };
@@ -5141,9 +5169,9 @@ _e(function (E, $) {
                 editor.enableMenusExcept('insertcode');
             }
         }
-        $txt.on('keyup click', function (e) {
+        $txt.on('keydown click', function (e) {
             // 此处必须使用 setTimeout 异步处理，否则不对
-            setTimeout(updateMenu); 
+            setTimeout(updateMenu);
         });
     });
 
@@ -5956,8 +5984,7 @@ _e(function (E, $) {
 // 编辑器区域 img toolbar
 (function (window, E, $) {
 
-    if (E.userAgent.indexOf('MSIE') > 0) {
-        // 暂时不兼容IE环境（IE环境下有自带的图片处理）
+    if (E.userAgent.indexOf('MSIE 8') > 0) {
         return;
     }
     

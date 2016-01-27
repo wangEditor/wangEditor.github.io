@@ -74,7 +74,9 @@ var define;
     E.userAgent = navigator.userAgent;
     E.getComputedStyle = window.getComputedStyle;
     E.w3cRange = typeof document.createRange === 'function';
-    E.website = 'wangEditor.github.io';
+    E.hostname = location.hostname.toLowerCase();
+    E.websiteHost = 'wangEditor.github.io';
+    E.isOnWebsite = E.hostname === E.websiteHost;
     E.docsite = 'wangEditor.github.io/doc/';
 
     // 暴露给全局对象
@@ -1391,6 +1393,10 @@ _e(function (E, $) {
             // 其他情况，隐藏 list
             self.hide();
         });
+
+        E.$window.scroll(function () {
+            self.hide();
+        });
     };
 
 });
@@ -1588,6 +1594,10 @@ _e(function (E, $) {
             }
 
             // 其他情况，隐藏 panel
+            self.hide();
+        });
+
+        E.$window.scroll(function () {
             self.hide();
         });
     };
@@ -1917,19 +1927,32 @@ _e(function (E, $) {
                 // 配置中取消了粘贴过滤
                 return;
             }
-
-            var data = e.clipboardData || e.originalEvent.clipboardData;
             var pasteHtml, $paste;
-            if (data == null || data.getData == null) {
+            var data = e.clipboardData || e.originalEvent.clipboardData;
+
+            if (data && data.getData) {
+                // w3c
+
+                // 获取粘贴过来的html
+                pasteHtml = data.getData('text/html');
+                // 创建dom
+                $paste = $('<div>' + pasteHtml + '</div>');
+                // 处理，并将结果存储到 resultHtml 变量
+                resultHtml = '';
+                handle($paste.get(0));
+            } else if (window.clipboardData && window.clipboardData.getData) {
+                // IE 直接从剪切板中取出纯文本格式
+                resultHtml = window.clipboardData.getData('text');
+                if (!resultHtml) {
+                    return;
+                }
+                // 拼接为 <p> 标签
+                resultHtml = '<p>' + resultHtml + '</p>';
+                resultHtml = resultHtml.replace((new RegExp('\n', 'g'), '</p><p>'));
+            } else {
+                // 其他情况
                 return;
             }
-            // 获取粘贴过来的 html
-            pasteHtml = data.getData('text/html');
-            $paste = $('<div>' + pasteHtml + '</div>');
-            
-            // 处理，并将结果存储到 resultHtml 变量
-            resultHtml = '';
-            handle($paste.get(0));
 
             // 执行命令
             if (resultHtml) {
@@ -4344,6 +4367,12 @@ _e(function (E, $) {
             var uploadImgUrl = config.uploadImgUrl;
             var $uploadImgPanel;
 
+            // IE8 不支持图片上传（ form.submit 一直有bug ）！！！！！！！！！！！！
+            if (E.userAgent.indexOf('MSIE 8') > 0) {
+                hideUploadImg();
+                return;
+            }  // ！！！！！！！！！！
+
             if (uploadImgUrl) {
                 // 第一，暴露出 $uploadContent 以便用户自定义 ！！！重要
                 editor.$uploadContent = $uploadContent;
@@ -5472,6 +5501,9 @@ _e(function (E, $) {
 
         // 获取editor的上传dom
         var $uploadContent = editor.$uploadContent;
+        if (!$uploadContent) {
+            return;
+        }
 
         // 自定义UI，并添加到上传dom节点上
         var $uploadIcon = $('<div class="upload-icon-container"><i class="wangeditor-menu-img-upload"></i></div>');
@@ -5580,7 +5612,7 @@ _e(function (E, $) {
         var multiple = self.multiple;
         var multipleTpl = multiple ? 'multiple="multiple"' : '';
         var $input = $('<input type="file" ' + acceptTpl + ' ' + multipleTpl + '/>');
-        var $container = $('<div style="display:none;"></div>');
+        var $container = $('<div style="visibility:hidden;"></div>');
 
         $container.append($input);
         E.$body.append($container);
@@ -5643,7 +5675,7 @@ _e(function (E, $) {
         var timeoutId;
 
         // ------------ begin 预览模拟上传 ------------
-        if (location.hostname.toLowerCase() === 'wangeditor.github.io') {
+        if (E.isOnWebsite) {
             E.log('预览模拟上传');
 
             if (window.URL && window.URL.createObjectURL) {
@@ -5733,7 +5765,7 @@ _e(function (E, $) {
         // 如果支持 html5 上传，则返回
         return;
     }
-
+    
     // 构造函数
     var UploadFile = function (opt) {
         this.uploadUrl = opt.uploadUrl;
@@ -5764,15 +5796,13 @@ _e(function (E, $) {
 
         var iframeId = 'iframe' + E.random();
         var $iframe = $('<iframe name="' + iframeId + '" id="' + iframeId + '" frameborder="0" width="0" height="0"></iframe>');
-        var fileAccept = self.fileAccept;
-        var acceptTpl = fileAccept ? 'accept="' + fileAccept + '"' : '';
         var multiple = self.multiple;
         var multipleTpl = multiple ? 'multiple="multiple"' : '';
-        var $input = $('<input type="file" ' + acceptTpl + ' ' + multipleTpl + ' name="wangEditorFormFile"/>');
+        var $input = $('<input type="file" ' + multipleTpl + ' name="wangEditorFormFile"/>');
         var $form = $('<form enctype="multipart/form-data" method="post" action="' + uploadUrl + '" target="' + iframeId + '"></form>');
-        var $container = $('<div style="display:none;"></div>');
+        var $container = $('<div style="visibility:hidden;"></div>');
 
-        $form.append($input).append($('<input type="submit"/>'));
+        $form.append($input).append($('<input type="submit" value="form-img-submit"/>'));
         $container.append($form);
         $container.append($iframe);
         E.$body.append($container);
@@ -5818,6 +5848,16 @@ _e(function (E, $) {
         var timeout = self.timeout;
         var timeoutId;
 
+        // 判断扩展名
+        var value = input.value.toLowerCase();
+        var fileExt = value.slice((value.lastIndexOf('.')) - value.length);
+        if (['.gif', '.jpg', 'jpeg', 'bmp', 'png'].indexOf(fileExt) < 0) {
+            alert('选择的文件不是图片');
+            self.clear();
+            return;
+        }
+
+
         // 超时处理
         function timeoutCallback() {
             iframeWindow.onload = null;
@@ -5858,6 +5898,7 @@ _e(function (E, $) {
 
         E.log('提交form，并开始超时计算，等待返回结果...');
         $form.submit();
+        // console.log($form.find('[type=submit]'));
         timeoutId = setTimeout(timeoutCallback, timeout);
 
         return false;
@@ -5885,14 +5926,33 @@ _e(function (E, $) {
 
         $txt.on('paste', function (pasteEvent) {
             var data = pasteEvent.clipboardData || pasteEvent.originalEvent.clipboardData;
+            var text;
             if (data == null) {
-                // IE8
+                // IE 中
+
+                // 获取粘贴的文本
+                text = window.clipboardData.getData('text');
+                if (!text) {
+                    // IE中，如果没有text，阻止默认行为
+                    return pasteEvent.preventDefault();
+                }
+
+                // IE中，如果text有值，则返回，不阻止默认行为
                 return;
             }
 
+            // 非 IE 情况
+            text = data.getData('text') ;
             var items = data.items;
-            if (!items) {
+
+            // 以下两个判断是重点！！！
+            if (!items && text) {
+                // 取不到图片，到时有text，则不继续进行，但不阻止默认行为
                 return;
+            }
+            if (!items && !text) {
+                // 既取不到图片，又取不到text，则阻止默认行为
+                return pasteEvent.preventDefault();
             }
 
             function insertImg (src) {
@@ -5947,7 +6007,7 @@ _e(function (E, $) {
                     xhr = new XMLHttpRequest();
 
                     // ------------ begin 预览模拟上传 ------------
-                    if (location.hostname.toLowerCase() === 'wangeditor.github.io') {
+                    if (E.isOnWebsite) {
                         E.log('预览模拟上传');
                         insertImg(base64);
                         return;

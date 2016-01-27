@@ -75,9 +75,9 @@ var define;
     E.getComputedStyle = window.getComputedStyle;
     E.w3cRange = typeof document.createRange === 'function';
     E.hostname = location.hostname.toLowerCase();
-    E.websiteHost = 'wangEditor.github.io';
+    E.websiteHost = 'wangeditor.github.io';
     E.isOnWebsite = E.hostname === E.websiteHost;
-    E.docsite = 'wangEditor.github.io/doc/';
+    E.docsite = 'wangeditor.github.io/doc/';
 
     // 暴露给全局对象
     window.wangEditor = E;

@@ -3,6 +3,7 @@
     background-color: #fff;
     padding: 30px 0;
     margin-bottom: 40px;
+    margin-top: 10px;
     border-bottom: 1px solid #f1f1f1;
     /*background-color: #f1f1f1*/
 }
@@ -40,19 +41,14 @@
     text-decoration: none;
 }
 
-.demo-container{
-    -webkit-box-shadow: 3px 3px 20px #ccc;
-    -moz-box-shadow: 3px 3px 20px #ccc;
-    box-shadow: 3px 3px 20px #ccc;
-    margin-bottom: 50px;
-}
-
 .info-container{
+    width: 1000px;
     margin-top: 10px;
     text-align: left;
     padding: 20px 10px;
     color: #666;
     text-shadow: 0 1px 1px #f1f1f1;
+    border-bottom: 1px solid #f1f1f1;
 }
 .info-container a{
     color: #666;

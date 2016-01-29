@@ -1,7 +1,7 @@
 $(function (){
 
-	var editor = $('#textarea1').wangEditor();
-
+    var editor = new wangEditor('divDemo');
+    editor.config.uploadImgUrl = '/upload';
+    editor.create();
 	
-
 });

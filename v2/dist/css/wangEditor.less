@@ -141,8 +141,7 @@
 .wangEditor-menu-container {
 
     width: 100%;
-    border-bottom: 1px\9 solid\9 #f1f1f1\9;
-    box-shadow: 0 1px 3px #999;
+    border-bottom: 1px solid #f1f1f1;
     background-color: #fff;
     
     a {
@@ -161,7 +160,7 @@
         float: left;
         position: relative;
         text-align: center;
-        height: 33px;
+        height: 31px;
         width: 35px;
 
         &:hover {
@@ -175,6 +174,7 @@
             color: @fore-color;
             width: 100%;
             padding: 8px 0;
+            font-size: 0.9em;
         }
 
          // 菜单选中状态
@@ -234,6 +234,11 @@
         width: 50px;
         margin-left: -25px;
     }
+}
+.wangEditor-menu-shadow {
+    border-bottom-width: 0;
+    border-bottom: 1px\9 solid\9 #f1f1f1\9;
+    box-shadow: 0 1px 3px #999;
 }
 .wangEditor-container {
     .wangEditor-txt{

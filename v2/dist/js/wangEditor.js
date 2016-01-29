@@ -883,6 +883,9 @@ _e(function (E, $) {
                 val.call(editor);
             });
         }
+
+        // $txt 快捷方式
+        editor.$txt = editor.txt.$txt;
     };
 
 });
@@ -912,6 +915,24 @@ _e(function (E, $) {
         var $menuContainer = $('<div class="wangEditor-menu-container clearfix"></div>');
 
         self.$menuContainer = $menuContainer;
+
+        // change shadow
+        self.changeShadow();
+    };
+
+    // 编辑区域滚动时，增加shadow
+    MenuContainer.fn.changeShadow = function () {
+        var $menuContainer = this.$menuContainer;
+        var editor = this.editor;
+        var $txt = editor.txt.$txt;
+
+        $txt.on('scroll', function () {
+            if ($txt.scrollTop() > 10) {
+                $menuContainer.addClass('wangEditor-menu-shadow');
+            } else {
+                $menuContainer.removeClass('wangEditor-menu-shadow');
+            }
+        });
     };
 
 });
@@ -2405,6 +2426,8 @@ _e(function (E, $) {
 _e(function (E, $) {
 
     E.config = {};
+
+    E.config.zindex = 10000;
 
     // 是否打印log
     E.config.printLog = true;
@@ -5284,10 +5307,14 @@ _e(function (E, $) {
             return;
         }
         var editor = this;
-        var lang = editor.config.lang;
+        var config = editor.config;
+        var zIndexConfig = config.zindex || 10000;
+        var lang = config.lang;
 
         var isSelected = false;
         var txtHeight;
+        var editorWidth;
+        var zIndex;
 
         // 创建 menu 对象
         var menu = new E.Menu({
@@ -5302,13 +5329,20 @@ _e(function (E, $) {
             var $editorContainer = editor.$editorContainer;
             $editorContainer.addClass('wangEditor-fullscreen');
 
+            // （先保存当前的）再设置z-index
+            zIndex = $editorContainer.css('z-index');
+            $editorContainer.css('z-index', zIndexConfig);
+
             // 记录高度
             var $txt = editor.txt.$txt;
             txtHeight = $txt.height();
-
             // 重新设置高度
             var menuContainer = editor.menuContainer;
             $txt.height(E.$window.height() - menuContainer.height());
+
+            // 记录宽度，并重新设置
+            editorWidth = $editorContainer.css('width');
+            $editorContainer.css('width', '100%');
 
             // 取消menuContainer的内联样式（menu吸顶时，会为 menuContainer 设置一些内联样式）
             editor.menuContainer.$menuContainer.attr('style', '');
@@ -5325,12 +5359,16 @@ _e(function (E, $) {
             // 取消样式
             var $editorContainer = editor.$editorContainer;
             $editorContainer.removeClass('wangEditor-fullscreen');
+            $editorContainer.css('z-index', zIndex);
 
             // 还原高度
             var $txt = editor.txt.$txt;
             if (txtHeight) {
                 $txt.height(txtHeight);
             }
+
+            // 欢迎宽度
+            $editorContainer.css('width', editorWidth);
 
             // 保存状态
             isSelected = false;
@@ -5434,6 +5472,9 @@ _e(function (E, $) {
             $valueContainer.after($editorContainer);
             $valueContainer.hide();
         }
+
+        // 设置宽度
+        $editorContainer.css('width', $valueContainer.css('width'));
     };
 
 });

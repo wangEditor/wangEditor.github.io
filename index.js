@@ -10,7 +10,7 @@ $(function (){
             title: '默认',
             size: 18,
             imgs: [
-                './static/emotions/default/1s.gif',
+                './static/emotions/default/1.gif',
                 './static/emotions/default/2.gif',
                 './static/emotions/default/3.gif',
                 './static/emotions/default/4.gif',

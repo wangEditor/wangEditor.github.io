@@ -1,11 +1,8 @@
 
 .jumbotron{
-    background-color: #fff;
+    background-color: #f1f1f1;
     padding: 30px 0;
     margin-bottom: 40px;
-    margin-top: 10px;
-    border-bottom: 1px solid #f1f1f1;
-    /*background-color: #f1f1f1*/
 }
 .jumbotron h1{
     font-size:40px;
@@ -53,7 +50,22 @@
 .info-container a{
     color: #666;
 }
+.info-container ul {
+    margin-left: 20px;
+}
 .info-container .title{
     font-size: 16px;
     font-weight: bold;
+    margin-bottom: 10px;
+}
+.info-container .users-logo-container a {
+    display: inline-block;
+    margin-right: 10px;
+    border: 1px solid #f1f1f1;
+}
+.info-container .users-logo-container a:hover {
+    text-decoration: none;
+}
+.info-container .users-logo-container a img {
+    height: 80px;
 }

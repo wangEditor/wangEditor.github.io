@@ -62,6 +62,7 @@
     display: inline-block;
     margin-right: 10px;
     border: 1px solid #f1f1f1;
+    margin-top: 10px;
 }
 .info-container .users-logo-container a:hover {
     text-decoration: none;

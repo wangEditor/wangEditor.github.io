@@ -216,6 +216,14 @@
   margin: 10px 0;
   line-height: 1.8;
 }
+.wangEditor-container .wangEditor-txt p *,
+.wangEditor-container .wangEditor-txt h1 *,
+.wangEditor-container .wangEditor-txt h2 *,
+.wangEditor-container .wangEditor-txt h3 *,
+.wangEditor-container .wangEditor-txt h4 *,
+.wangEditor-container .wangEditor-txt h5 * {
+  line-height: 1.8;
+}
 .wangEditor-container .wangEditor-txt ul,
 .wangEditor-container .wangEditor-txt ol {
   padding-left: 20px;
@@ -505,8 +513,8 @@
 }
 @font-face {
   font-family: 'icomoon';
-  src: url('fonts/icomoon.eot?-qdfu1s');
-  src: url('fonts/icomoon.eot?#iefix-qdfu1s') format('embedded-opentype'), url('fonts/icomoon.ttf?-qdfu1s') format('truetype'), url('fonts/icomoon.woff?-qdfu1s') format('woff'), url('fonts/icomoon.svg?-qdfu1s#icomoon') format('svg');
+  src: url('../fonts/icomoon.eot?-qdfu1s');
+  src: url('../fonts/icomoon.eot?#iefix-qdfu1s') format('embedded-opentype'), url('../fonts/icomoon.ttf?-qdfu1s') format('truetype'), url('../fonts/icomoon.woff?-qdfu1s') format('woff'), url('../fonts/icomoon.svg?-qdfu1s#icomoon') format('svg');
   font-weight: normal;
   font-style: normal;
 }

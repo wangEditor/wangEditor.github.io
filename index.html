@@ -2,21 +2,22 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <meta name="keywords" contect="富文本,富文本编辑器,富文本框,在线编辑器,html,web,javascript">
-    <meta name="Description" contect="wangEditor - 轻量级web富文本编辑器">
-    <title>wangEditor - 轻量级web富文本编辑器</title>
+    <meta name="keywords" content="富文本,富文本编辑器,富文本框,在线编辑器,html,javascript, typescript,rich editor">
+    <meta name="Description" content="wangEditor - 轻量级 web 富文本编辑器">
+    <title>wangEditor - 轻量级 web 富文本编辑器</title>
 
-    <link rel="stylesheet" type="text/css" href="bootstrap-3.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="fontawesome-4.2.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="./bootstrap-3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="./fontawesome-4.2.0/css/font-awesome.min.css">
     <!--[if IE]>
-    <link rel="stylesheet" type="text/css" href="fontawesome-4.2.0/css/font-awesome-ie7.min.css">
+    <link rel="stylesheet" type="text/css" href="./fontawesome-4.2.0/css/font-awesome-ie7.min.css">
     <![endif]-->
 
-    <link rel="stylesheet" type="text/css" href="css/common.css">
-    <link rel="stylesheet" type="text/css" href="css/index.css">
-    <link rel="shortcut icon" href="favicon.ico" /> 
+    <link rel="stylesheet" type="text/css" href="./css/common.css">
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
+    <link rel="shortcut icon" href="favicon.ico" />
 
     <script>
+        // 百度统计
         var _hmt = _hmt || [];
         (function() {
           var hm = document.createElement("script");
@@ -25,16 +26,15 @@
           s.parentNode.insertBefore(hm, s);
         })();
     </script>
-
 </head>
 <body>
     <!-- jumbotron（超大屏幕） -->
     <div class="jumbotron">
       <div class="container">
         <center>
-            <h1>wangEditor</h1>
+            <h1>wangEditor<span class="sub">V4</span></h1>
             <p>
-                基于javascript和css开发的 Web富文本编辑器，
+                Typescript 开发的 Web 富文本编辑器，
                 轻量、简洁、易用、开源免费
             </p>
         </center>
@@ -46,112 +46,64 @@
         <center>
             <div style="max-width:1100px;">
 
-
                 <!--链接导航-->
                 <div class="link-container clearfix">
                     <a href="index.html" class="active">
                         <i class="fa fa-eye"></i> demo
                     </a>
-                    <a href="http://www.kancloud.cn/wangfupeng/wangeditor3/332599" target="_blank">
+                    <a href="http://www.wangeditor.com/doc" target="_blank">
                         <i class="fa fa-th-list"></i> 文档
                     </a>
-                    <a href="https://github.com/wangfupeng1988/wangEditor/releases" target="_blank">
+                    <a href="https://github.com/wangeditor-team/wangEditor/releases" target="_blank">
                         <i class="fa fa-download"></i> 下载
                     </a>
-                    <a href="https://github.com/wangfupeng1988/wangEditor/" target="_blank">
+                    <a href="https://github.com/wangeditor-team/wangEditor/" target="_blank">
                         <i class="fa fa-code-fork"></i> github
                     </a>
                 </div><!--链接导航 end-->
 
                 <!--demo-->
                 <div style="text-align:left;">
-                    <div id="divDemo"><p>欢迎使用<b>wangEditor 富文本编辑器</b>，请输入内容...</p><blockquote>通知：<b>wangEditor 新版</b>已启动研发，对开源感兴趣的，可以申请加入研发小组。请加 QQ 群 710646022 ，并私聊群主即可。</blockquote></div>
+                    <div id="div-demo">
+                        <blockquote>Web 富文本编辑器有很多，但我们是认真的！</blockquote>
+                        <h1>为何选择 wangEditor</h1>
+                        <ul>
+                            <li>万星项目 <a href="https://github.com/wangeditor-team/wangEditor/releases">Github Star 1w+</a></li>
+                            <li>简洁、轻量级、<a href="http://www.wangeditor.com/doc/">文档</a>齐全</li>
+                            <li>QQ 群及时答疑</li>
+                            <li><a href="http://www.wangeditor.com/doc/#开发人员">开源团队</a>维护，非个人单兵作战</li>
+                        </ul>
+                        <h1>初见</h1>
+                        <p>npm 安装 <code>npm i wangeditor --save</code> ，几行代码即可创建一个编辑器。</p>
+                        <pre type="JavaScript"><code>import E from 'wangeditor'
+const editor = new E('#div1')
+editor.create()</code></pre>
+                        <p>更多使用配置，请阅读<a href="http://www.wangeditor.com/doc/">使用文档</a>。</p>
+                        <h1>浏览器兼容性</h1>
+                        <ul>
+                            <li>兼容主流 PC 浏览器，IE11+</li>
+                            <li>不支持移动端和 ipad</li>
+                        </ul>
+                        <h1>遇到问题</h1>
+                        <ul>
+                            <li>加入 QQ 群  <b>164999061(人已满)</b>  <b>710646022</b></li>
+                            <li>
+                                <a href="https://github.com/wangeditor-team/wangEditor/issues" target="_blank">
+                                    提交问题和建议
+                                </a>
+                            </li>
+                        </ul>
+                        <h1>谁在维护</h1>
+                        <p>wangEditor 现有一个开源团队在维护，团队可以保证答疑、bug 修复和迭代效率。</p>
+                        <p><a href="http://www.wangeditor.com/doc/#开发人员">查看开发团队，或想加入开发团队</a></p>
+                        <h1>为我们点赞</h1>
+                        <p>如果你感觉有收获，欢迎给我打赏，以激励我们更多输出优质开源内容。</p>
+                        <p>
+                            <img width="240" src="./imgs/ali-pay.jpeg"/>
+                            <img width="240" src="./imgs/wechat-pay.jpeg"/>
+                        </p>
+                    </div>
                 </div><!--demo end-->
-
-                <!--交流方式-->
-                <div class="info-container">
-                    <p class="title">
-                        <i class="fa fa-comment-o"></i> 
-                        交流方式
-                    </p>
-                    <ul>
-                        <li>交流QQ群  <b>164999061(人已满)</b>  <b>710646022</b></li>
-                        <li>
-                            <a href="https://github.com/wangfupeng1988/wangEditor/issues" target="_blank">
-                                直接提交问题和建议
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://github.com/wangfupeng1988/wangEditor/issues?q=is%3Aissue+is%3Aclosed" target="_blank">
-                                大家都在讨论什么？
-                            </a>
-                        </li>
-                        <li>
-                            <a href="https://github.com/wangfupeng1988/wangEditor/commits/master" target="_blank">
-                                查看产品更新日志
-                            </a>
-                        </li>
-                    </ul>
-                </div><!--交流方式 end-->
-
-                <!--了解作者-->
-                <div class="info-container" style="border-bottom:none;">
-                    <p class="title">
-                        <i class="fa fa-user"></i> 
-                        了解作者
-                    </p>
-                    <ul>
-                        <li>
-                            <a href="http://www.cnblogs.com/wangfupeng1988/default.html?OnlyTitle=1" target="_blank">
-                                关注作者的博客
-                            </a>
-                            -
-                            <a href="http://www.cnblogs.com/wangfupeng1988/p/4001284.html" target="_blank">
-                                《深入理解javascript原型和闭包系列》
-                            </a>
-                            -
-                            <a href="https://github.com/wangfupeng1988/js-async-tutorial" target="_blank">
-                                《深入理解javascript异步系列》
-                            </a>
-                            -
-                            <a href="https://github.com/wangfupeng1988/node-tutorial" target="_blank">
-                                《换种思路学习nodejs》
-                            </a>
-                            -
-                            <a href="http://www.cnblogs.com/wangfupeng1988/p/4325007.html" target="_blank">
-                                《CSS知多少》
-                            </a>
-                        </li>
-                        <!-- <li>
-                            <a href="https://www.imooc.com/t/4427201" target="_blank">
-                                学习作者的教程
-                            </a>
-                            -
-                            <a href="https://coding.imooc.com/class/190.html" target="_blank">
-                                《前端JS高级面试题》
-                            </a>
-                            -
-                            <a href="http://coding.imooc.com/class/115.html" target="_blank">
-                                《前端JS基础面试题讲解》
-                            </a>
-                            -
-                            <a href="http://coding.imooc.com/class/99.html" target="_blank">
-                                《React.js模拟大众点评webapp》
-                            </a>
-                            -
-                            <a href="http://www.imooc.com/learn/745" target="_blank">
-                                《zepto设计与源码分析》
-                            </a>
-                            -
-                            <a href="http://study.163.com/course/courseMain.htm?courseId=691008" target="_blank">
-                                《json2.js源码解读》
-                            </a>
-                        </li> -->
-                    </ul>
-                    <p><br></p>
-                    <p>如果你感觉有收获，欢迎给我打赏 ———— 以激励我更多输出优质开源内容</p>
-                    <p><img width="300px" src="https://camo.githubusercontent.com/e1558b631931e0a1606c769a61f48770cc0ccb56/687474703a2f2f696d61676573323031352e636e626c6f67732e636f6d2f626c6f672f3133383031322f3230313730322f3133383031322d32303137303232383131323233373739382d313530373139363634332e706e67"/></p>
-                </div><!--了解作者 end-->
 
             </div>
         </center>
@@ -160,13 +112,13 @@
     <!--footer-->
     <footer>
         <center>
-            <p>&copy;2017 wangEditor.github.io</p>
+            <p>Copyright &copy; wangEditor.com (2017 - present) all right reserved</p>
         </center>
     </footer><!--footer end-->
 
-    <script type="text/javascript" src='js/jquery-1.10.2.min.js'></script>
-    <script type="text/javascript" src='bootstrap-3.3.0/js/bootstrap.min.js'></script>
-    <script type="text/javascript" src='//unpkg.com/wangeditor/release/wangEditor.min.js'></script>
-    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src='./js/jquery-1.10.2.min.js'></script>
+    <script type="text/javascript" src='./bootstrap-3.3.0/js/bootstrap.min.js'></script>
+    <script type="text/javascript" src='//unpkg.com/wangeditor/dist/wangEditor.min.js'></script>
+    <script type="text/javascript" src="./js/index.js"></script>
 </body>
 </html>

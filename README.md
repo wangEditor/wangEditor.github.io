@@ -1,5 +1,5 @@
 
 # wangEditor 官网
 
-开源链接：https://github.com/wangfupeng1988/wangEditor
-
+- 网址 http://wangeditor.com/
+- 源码 https://github.com/wangeditor-team/wangEditor

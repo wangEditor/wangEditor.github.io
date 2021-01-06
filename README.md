@@ -4,4 +4,7 @@
 - 网址 http://wangeditor.com/
 - 源码 https://github.com/wangeditor-team/wangEditor
 
-web 服务同步到了 [vercel.com](https://vercel.com/) ，由它自动同步该 repo 的代码并提供静态服务。
+## 关于 www.wangeditor.com 服务
+
+代码同步到 [vercel.com/wangeditor/wangeditor-home](https://vercel.com/wangeditor/wangeditor-home) ，服务由 vercel 提供。\
+不再由 github pages 提供了。

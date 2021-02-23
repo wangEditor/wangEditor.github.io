@@ -1,0 +1,132 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="keywords" content="rich text,rich text editor,rich text box,online editor,html,javascript, typescript,rich editor">
+    <meta name="Description" content="wangEditor - lightweight web rich editor">
+    <title>wangEditor - lightweight web rich editor</title>
+
+    <link rel="stylesheet" type="text/css" href="./bootstrap-3.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="./fontawesome-4.2.0/css/font-awesome.min.css">
+    <!--[if IE]>
+    <link rel="stylesheet" type="text/css" href="./fontawesome-4.2.0/css/font-awesome-ie7.min.css">
+    <![endif]-->
+
+    <link rel="stylesheet" type="text/css" href="./css/common.css">
+    <link rel="stylesheet" type="text/css" href="./css/index.css">
+    <link rel="shortcut icon" href="favicon.ico" />
+
+    <script>
+        // wangeditor.github.io 跳转到 www.wangeditor.com
+        if (location.host.indexOf('.github.io') > 0) {
+            location.href = 'https://www.wangeditor.com/'
+        }
+
+        // 百度统计
+        var _hmt = _hmt || [];
+        (function() {
+          var hm = document.createElement("script");
+          hm.src = "https://hm.baidu.com/hm.js?a25f260386e515f4eee3e0a6bb4166be";
+          var s = document.getElementsByTagName("script")[0]; 
+          s.parentNode.insertBefore(hm, s);
+        })();
+    </script>
+</head>
+<body>
+    <!-- jumbotron（超大屏幕） -->
+    <div class="jumbotron">
+      <div class="container">
+        <center>
+            <h1>wangEditor<span class="sub">V4</span></h1>
+            <p>
+                web rich editor of using Typescript develop,
+                little、terse、easyUse、free and Open Source
+            </p>
+        </center>
+      </div>
+    </div>
+
+    <!-- body container -->
+    <div class="container">
+        <center>
+            <div style="max-width:1100px;">
+
+                <!--链接导航-->
+                <div class="link-container clearfix">
+                    <a href="//doc.wangeditor.com/#demo" target="_blank">
+                        <i class="fa fa-eye"></i> Demo
+                    </a>
+                    <a href="//doc.wangeditor.com/" target="_blank">
+                        <i class="fa fa-th-list"></i> Document
+                    </a>
+                    <a href="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/" target="_blank">
+                        <i class="fa fa-download"></i> Download
+                    </a>
+                    <a href="https://github.com/wangeditor-team/wangEditor/" target="_blank">
+                        <i class="fa fa-code-fork"></i> Github
+                    </a>
+                </div><!--链接导航 end-->
+
+                <!--demo-->
+                <div style="text-align:left;">
+                    <div id="div-demo">
+                        <blockquote>Strive to become open source web rich editor of best user experience.</blockquote>
+                        <h1>Why Select WangEditor</h1>
+                        <ul>
+                            <li> <a href="https://github.com/wangeditor-team/wangEditor/releases">Github Star 1w+</a></li>
+                            <li>terse、little、<a href="//doc.wangeditor.com/">document</a> perfect</li>
+                            <li><a href="//doc.wangeditor.com/#开发人员">Open Source team</a> maintain</li>
+                        </ul>
+                        <h1>Get Started</h1>
+                        <p>You can use <code>`npm i wangEditor --save` to install wangEditor</code>, then using a little code create a rich editor.</p>
+                        <pre type="JavaScript"><code>import E from 'wangeditor'
+const editor = new E('#div1')
+editor.create()</code></pre>
+                        <p>You can see <a href="//doc.wangeditor.com/">the usage document</a> to get more config.</p>
+                        <h1>Demo</h1>
+                        <p>Online demo <a href="https://codepen.io/collection/DNmPQV">codepen.io/collection/DNmPQV</a> 。</p>
+                        <p>Notice, if you do not open the Online demo, you can see <a href="https://github.com/wangeditor-team/wangEditor/tree/master/examples">Github examples</a>.</p>
+                        <h1>Browser Compatibility</h1>
+                        <ul>
+                            <li>Support model browser, IE11+</li>
+                            <li>Not support mobile and iPad</li>
+                        </ul>
+                        <h1>Questions</h1>
+                        <ul>
+                            <li>
+                                <a href="https://github.com/wangeditor-team/wangEditor/issues" target="_blank">
+                                    Submit issue and advice.
+                                </a>
+                            </li>
+                        </ul>
+                        <h1>Contribution</h1>
+                        <p>We welcome to the contributor of not a team number. If you want to submit Pull Request, please refer to <a href="https://github.com/wangeditor-team/wangEditor/blob/master/docs/contribution.md" target="_blank">contributing guide</a>. </p>
+                        <h1>Contributors team</h1>
+                        <p>wangEditor has an open source team to maintain the project, open source can ensuring question、fix bug and iteration effect.</p>
+                        <p><a href="//doc.wangeditor.com/#开发人员">view develop team or join us</a></p>
+                        <h1>Sponsors</h1>
+                        <p>If you feel having gained, welcome sponsor to us, that can encourage us to produce more perfect open source content. </p>
+                        <p>
+                            <img width="240" src="./imgs/ali-pay.jpeg"/>
+                            <img width="240" src="./imgs/wechat-pay.jpeg"/>
+                        </p>
+                    </div>
+                </div><!--demo end-->
+
+            </div>
+        </center>
+    </div><!-- body container end -->
+
+    <!--footer-->
+    <footer>
+        <center>
+            <p>Copyright &copy; wangEditor.com (2017 - present) all right reserved</p>
+        </center>
+    </footer><!--footer end-->
+
+    <script type="text/javascript" src='./js/jquery-1.10.2.min.js'></script>
+    <script type="text/javascript" src='./bootstrap-3.3.0/js/bootstrap.min.js'></script>
+    <script type="text/javascript" src='//cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js'></script>
+    <script type="text/javascript" src="./js/index.js"></script>
+</body>
+</html>

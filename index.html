@@ -1,141 +1,45 @@
-<!DOCTYPE HTML>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <meta name="keywords" content="富文本,富文本编辑器,富文本框,在线编辑器,html,javascript, typescript,rich editor">
-    <meta name="Description" content="wangEditor - 轻量级 web 富文本编辑器">
-    <title>wangEditor - 轻量级 web 富文本编辑器</title>
-
-    <link rel="stylesheet" type="text/css" href="./bootstrap-3.3.0/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="./fontawesome-4.2.0/css/font-awesome.min.css">
-    <!--[if IE]>
-    <link rel="stylesheet" type="text/css" href="./fontawesome-4.2.0/css/font-awesome-ie7.min.css">
-    <![endif]-->
-
-    <link rel="stylesheet" type="text/css" href="./css/common.css">
-    <link rel="stylesheet" type="text/css" href="./css/index.css">
-    <link rel="shortcut icon" href="favicon.ico" />
-
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="generator" content="VuePress 2.0.0-beta.38">
+    <style>
+      :root {
+        --c-bg: #fff;
+      }
+      html.dark {
+        --c-bg: #22272e;
+      }
+      html, body {
+        background-color: var(--c-bg);
+      }
+    </style>
     <script>
-        // wangeditor.github.io 跳转到 www.wangeditor.com
-        if (location.host.indexOf('.github.io') > 0) {
-            location.href = 'https://www.wangeditor.com/'
-        }
-
-        // 百度统计
-        var _hmt = _hmt || [];
-        (function() {
-          var hm = document.createElement("script");
-          hm.src = "https://hm.baidu.com/hm.js?a25f260386e515f4eee3e0a6bb4166be";
-          var s = document.getElementsByTagName("script")[0]; 
-          s.parentNode.insertBefore(hm, s);
-        })();
+      const userMode = localStorage.getItem('vuepress-color-scheme');
+			const systemDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+			if (userMode === 'dark' || (userMode !== 'light' && systemDarkMode)) {
+				document.documentElement.classList.toggle('dark', true);
+			}
     </script>
-</head>
-<body>
-    <!-- jumbotron（超大屏幕） -->
-    <div class="jumbotron">
-      <div class="container">
-        <center>
-            <h1>wangEditor<span class="sub">V4</span></h1>
-            <p>
-                Typescript 开发的 Web 富文本编辑器，
-                轻量、简洁、易用、开源免费
-            </p>
-        </center>
-      </div>
-    </div>
+    <link rel="icon" href="/favicon.ico"><title>wangEditor</title><meta name="description" content="开源 Web 富文本编辑器">
+    <link rel="modulepreload" href="/assets/app.00cf3141.js"><link rel="modulepreload" href="/assets/index.html.3ad64ae5.js"><link rel="modulepreload" href="/assets/index.html.c897638c.js"><link rel="modulepreload" href="/assets/editor.591eec2d.js">
+    <link rel="stylesheet" href="/assets/style.fb3abad0.css">
+  </head>
+  <body>
+    <div id="app"><!--[--><div class="theme-container no-sidebar"><!--[--><header ref_key="navbar" class="navbar"><div class="toggle-sidebar-button" title="toggle sidebar" aria-expanded="false" role="button" tabindex="0"><div class="icon" aria-hidden="true"><span></span><span></span><span></span></div></div><span><a aria-current="page" href="/" class="router-link-active router-link-exact-active"><img class="logo" src="/image/logo.png" alt="wangEditor"><span class="site-name can-hide">wangEditor</span></a></span><div class="navbar-items-wrapper" style=""><!--[--><!--]--><nav class="navbar-items can-hide"><!--[--><div class="navbar-item"><a href="/v5/" class="" aria-label="指南"><!--[--><!--]--> 指南 <!--[--><!--]--></a></div><div class="navbar-item"><a class="external-link" href="https://www.wangeditor.com/demo/index.html" rel="noopener noreferrer" target="_blank" aria-label="Demo"><!--[--><!--]--> Demo <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></div><div class="navbar-item"><a href="/v5/plugins.md" class="" aria-label="插件"><!--[--><!--]--> 插件 <!--[--><!--]--></a></div><div class="navbar-item"><a class="external-link" href="https://github.com/wangeditor-team/wangEditor" rel="noopener noreferrer" target="_blank" aria-label="Github"><!--[--><!--]--> Github <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></div><div class="navbar-item"><a class="external-link" href="https://www.wangeditor.com/v4/" rel="noopener noreferrer" target="_blank" aria-label="v4 版本"><!--[--><!--]--> v4 版本 <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></div><div class="navbar-item"><div class="navbar-dropdown-wrapper"><button class="navbar-dropdown-title" type="button" aria-label="Select language"><span class="title">Languages</span><span class="arrow down"></span></button><button class="navbar-dropdown-title-mobile" type="button" aria-label="Select language"><span class="title">Languages</span><span class="right arrow"></span></button><!--[--><ul style="display:none;" class="navbar-dropdown"><!--[--><li class="navbar-dropdown-item"><a aria-current="page" href="/" class="router-link-active router-link-exact-active" aria-label="简体中文"><!--[--><!--]--> 简体中文 <!--[--><!--]--></a></li><li class="navbar-dropdown-item"><a href="/en/" class="" aria-label="English"><!--[--><!--]--> English <!--[--><!--]--></a></li><!--]--></ul><!--]--></div></div><!--]--></nav><!--[--><!--]--><button class="toggle-dark-button" title="toggle dark mode"><svg style="" class="icon" focusable="false" viewBox="0 0 32 32"><path d="M16 12.005a4 4 0 1 1-4 4a4.005 4.005 0 0 1 4-4m0-2a6 6 0 1 0 6 6a6 6 0 0 0-6-6z" fill="currentColor"></path><path d="M5.394 6.813l1.414-1.415l3.506 3.506L8.9 10.318z" fill="currentColor"></path><path d="M2 15.005h5v2H2z" fill="currentColor"></path><path d="M5.394 25.197L8.9 21.691l1.414 1.415l-3.506 3.505z" fill="currentColor"></path><path d="M15 25.005h2v5h-2z" fill="currentColor"></path><path d="M21.687 23.106l1.414-1.415l3.506 3.506l-1.414 1.414z" fill="currentColor"></path><path d="M25 15.005h5v2h-5z" fill="currentColor"></path><path d="M21.687 8.904l3.506-3.506l1.414 1.415l-3.506 3.505z" fill="currentColor"></path><path d="M15 2.005h2v5h-2z" fill="currentColor"></path></svg><svg style="display:none;" class="icon" focusable="false" viewBox="0 0 32 32"><path d="M13.502 5.414a15.075 15.075 0 0 0 11.594 18.194a11.113 11.113 0 0 1-7.975 3.39c-.138 0-.278.005-.418 0a11.094 11.094 0 0 1-3.2-21.584M14.98 3a1.002 1.002 0 0 0-.175.016a13.096 13.096 0 0 0 1.825 25.981c.164.006.328 0 .49 0a13.072 13.072 0 0 0 10.703-5.555a1.01 1.01 0 0 0-.783-1.565A13.08 13.08 0 0 1 15.89 4.38A1.015 1.015 0 0 0 14.98 3z" fill="currentColor"></path></svg></button><form class="search-box" role="search"><input type="search" placeholder="搜索" autocomplete="off" spellcheck="false" value><!----></form></div></header><!--]--><div class="sidebar-mask"></div><!--[--><aside class="sidebar"><nav class="navbar-items"><!--[--><div class="navbar-item"><a href="/v5/" class="" aria-label="指南"><!--[--><!--]--> 指南 <!--[--><!--]--></a></div><div class="navbar-item"><a class="external-link" href="https://www.wangeditor.com/demo/index.html" rel="noopener noreferrer" target="_blank" aria-label="Demo"><!--[--><!--]--> Demo <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></div><div class="navbar-item"><a href="/v5/plugins.md" class="" aria-label="插件"><!--[--><!--]--> 插件 <!--[--><!--]--></a></div><div class="navbar-item"><a class="external-link" href="https://github.com/wangeditor-team/wangEditor" rel="noopener noreferrer" target="_blank" aria-label="Github"><!--[--><!--]--> Github <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></div><div class="navbar-item"><a class="external-link" href="https://www.wangeditor.com/v4/" rel="noopener noreferrer" target="_blank" aria-label="v4 版本"><!--[--><!--]--> v4 版本 <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a></div><div class="navbar-item"><div class="navbar-dropdown-wrapper"><button class="navbar-dropdown-title" type="button" aria-label="Select language"><span class="title">Languages</span><span class="arrow down"></span></button><button class="navbar-dropdown-title-mobile" type="button" aria-label="Select language"><span class="title">Languages</span><span class="right arrow"></span></button><!--[--><ul style="display:none;" class="navbar-dropdown"><!--[--><li class="navbar-dropdown-item"><a aria-current="page" href="/" class="router-link-active router-link-exact-active" aria-label="简体中文"><!--[--><!--]--> 简体中文 <!--[--><!--]--></a></li><li class="navbar-dropdown-item"><a href="/en/" class="" aria-label="English"><!--[--><!--]--> English <!--[--><!--]--></a></li><!--]--></ul><!--]--></div></div><!--]--></nav><!--[--><!--]--><!----><!--[--><!--]--></aside><!--]--><!--[--><main class="home"><header class="hero"><!----><h1 id="main-title">wangEditor 5</h1><p class="description">开源 Web 富文本编辑器，开箱即用，配置简单</p><p class="actions"><!--[--><a href="/v5/getting-started.html" class="action-button primary" aria-label="快速上手"><!--[--><!--]--> 快速上手 <!--[--><!--]--></a><a class="external-link action-button secondary" href="https://www.wangeditor.com/demo/index.html" rel="noopener noreferrer" target="_blank" aria-label="demo 演示"><!--[--><!--]--> demo 演示 <span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span><!--[--><!--]--></a><!--]--></p></header><div class="features"><!--[--><div class="feature"><h2>简洁易用，功能强大</h2><p>快速接入，配置简单，几行代码即可生成。集成了所有常见功能，无需二次开发。在 Vue React 也可以快速接入。</p></div><div class="feature"><h2>支持 JS Vue React</h2><p>不依赖任何第三方框架，可用于 jQuery Vue React 等。wangEditor 提供了官方的 Vue React 组件。</p></div><div class="feature"><h2>踩过 4000+ 坑</h2><p>wangEditor 开源多年，有大量用户使用和反馈，我们已解决了太多的用户问题（详见 github issues）。</p></div><!--]--></div><div class="theme-default-content custom"><!--[--><h3 id="使用简单" tabindex="-1"><a class="header-anchor" href="#使用简单" aria-hidden="true">#</a> 使用简单</h3><p>10 行代码即可创建一个功能健全的富文本编辑器，可查看 <a href="https://www.wangeditor.com/demo/index.html" target="_blank" rel="noopener noreferrer">demo 示例<span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span></a>。如用于 Vue React 可参考<a href="/v5/for-frame.html" class="">这里</a>。</p><p><img src="/image/editor.png" alt=""></p><div class="language-javascript ext-js line-numbers-mode"><pre class="language-javascript"><code><span class="token keyword">import</span> <span class="token string">&#39;@wangeditor/editor/dist/css/style.css&#39;</span>
+<span class="token keyword">import</span> <span class="token punctuation">{</span> createEditor<span class="token punctuation">,</span> createToolbar <span class="token punctuation">}</span> <span class="token keyword">from</span> <span class="token string">&#39;@wangeditor/editor&#39;</span>
 
-    <!-- body container -->
-    <div class="container">
-        <center>
-            <div style="max-width:1100px;">
-
-                <!--链接导航-->
-                <div class="link-container clearfix">
-                    <a href="/v4/#demo" target="_blank">
-                        <i class="fa fa-eye"></i> 示例
-                    </a>
-                    <a href="/v4/" target="_blank">
-                        <i class="fa fa-th-list"></i> 文档
-                    </a>
-                    <a href="https://cdn.jsdelivr.net/npm/wangeditor@latest/dist/" target="_blank">
-                        <i class="fa fa-download"></i> 下载
-                    </a>
-                    <a href="https://github.com/wangeditor-team/wangEditor/" target="_blank">
-                        <i class="fa fa-github"></i> 源码
-                    </a>
-                    <a href="/en.html">
-                        <i class="fa fa-globe"></i> English
-                    </a>
-                </div><!--链接导航 end-->
-
-                <!--demo-->
-                <div style="text-align:left;">
-                    <div id="div-demo">
-                        <blockquote>争做国内使用体验Z好的开源 Web 富文本编辑器！</blockquote>
-                        <p><span style="background-color: yellow;">【通知】wangEditor 新版本 V5 已<b>正式发布</b>，可查阅 <a href="https://www.wangeditor.com/v5/">V5 文档</a>。</span></p>
-                        <h1>为何选择 wangEditor</h1>
-                        <ul>
-                            <li>简洁、轻量级、<a href="/v4/">文档</a>齐全</li>
-                            <li>万星项目 <a href="https://github.com/wangeditor-team/wangEditor/releases">Github Star 1w+</a></li>
-                            <li>npm 周下载量 1w+</li>
-                            <li>CDN 月下载量百万+（来自 <a href="https://www.jsdelivr.com/package/npm/wangeditor">jsdelivr</a>）</li>
-                            <li>QQ 群及时答疑</li>
-                            <li><a href="/v4/#开发人员">开源团队</a>维护，非个人单兵作战</li>
-                        </ul>
-                        <h1>初见</h1>
-                        <p>npm 安装 <code>npm i wangeditor --save</code> ，几行代码即可创建一个编辑器。</p>
-                        <pre type="JavaScript"><code>import E from 'wangeditor'
-const editor = new E('#div1')
-editor.create()</code></pre>
-                        <p>更多使用配置，请阅读<a href="/v4/">使用文档</a>。</p>
-                        <h1>demo</h1>
-                        <p>在线体验 demo 可到 <a href="https://codepen.io/collection/DNmPQV">codepen.io/collection/DNmPQV</a> 。</p>
-                        <p>注意，如果打不开，可以去查看 <a href="https://github.com/wangeditor-team/wangEditor/tree/master/examples">github examples</a> 的源码。</p>
-                        <h1>浏览器兼容性</h1>
-                        <ul>
-                            <li>兼容主流 PC 浏览器，IE11+</li>
-                            <li>不支持移动端和 ipad</li>
-                        </ul>
-                        <h1>遇到问题</h1>
-                        <ul>
-                            <li>加入 QQ 群：164999061(人已满)，710646022(人已满)，901247714(人已满)，606602511(人已满)，764778054（人已满），812473515</li>
-                            <li>
-                                <a href="https://github.com/wangeditor-team/wangEditor/issues" target="_blank">
-                                    提交问题和建议
-                                </a>
-                            </li>
-                        </ul>
-                        <h1>贡献代码</h1>
-                        <p>欢迎非团队成员贡献代码，提交 Pull Request，请一定参考<a href="https://github.com/wangeditor-team/wangEditor/blob/master/docs/contribution.md" target="_blank">贡献代码流程</a>。</p>
-                        <h1>谁在维护</h1>
-                        <p>wangEditor 现有一个开源团队在维护，团队可以保证答疑、bug 修复和迭代效率。</p>
-                        <p><a href="/v4/#开发人员">查看开发团队，或想加入开发团队</a></p>
-                        <h1>为我们点赞</h1>
-                        <p>如果你感觉有收获，欢迎给我打赏，以激励我们更多输出优质开源内容。</p>
-                        <p>
-                            <img width="240" src="./imgs/ali-pay.jpeg"/>
-                            <img width="240" src="./imgs/wechat-pay.jpeg"/>
-                        </p>
-                    </div>
-                </div><!--demo end-->
-
-            </div>
-        </center>
-    </div><!-- body container end -->
-
-    <!--footer-->
-    <footer>
-        <center>
-            <p>Copyright &copy; wangEditor.com (2017 - present) all right reserved</p>
-        </center>
-    </footer><!--footer end-->
-
-    <script type="text/javascript" src='./js/jquery-1.10.2.min.js'></script>
-    <script type="text/javascript" src='./bootstrap-3.3.0/js/bootstrap.min.js'></script>
-    <script type="text/javascript" src='//cdn.jsdelivr.net/npm/wangeditor@latest/dist/wangEditor.min.js'></script>
-    <!-- <script type="text/javascript" src='//cdn.jsdelivr.net/npm/wangeditor@4.6.12/dist/wangEditor.min.js'></script> -->
-    <script type="text/javascript" src="./js/index.js"></script>
-</body>
+<span class="token comment">// 创建编辑器</span>
+<span class="token keyword">const</span> editor <span class="token operator">=</span> <span class="token function">createEditor</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  <span class="token literal-property property">selector</span><span class="token operator">:</span> <span class="token string">&#39;#editor-container&#39;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+<span class="token comment">// 创建工具栏</span>
+<span class="token keyword">const</span> toolbar <span class="token operator">=</span> <span class="token function">createToolbar</span><span class="token punctuation">(</span><span class="token punctuation">{</span>
+  editor<span class="token punctuation">,</span>
+  <span class="token literal-property property">selector</span><span class="token operator">:</span> <span class="token string">&#39;#toolbar-container&#39;</span>
+<span class="token punctuation">}</span><span class="token punctuation">)</span>
+</code></pre><div class="line-numbers" aria-hidden="true"><span class="line-number">1</span><br><span class="line-number">2</span><br><span class="line-number">3</span><br><span class="line-number">4</span><br><span class="line-number">5</span><br><span class="line-number">6</span><br><span class="line-number">7</span><br><span class="line-number">8</span><br><span class="line-number">9</span><br><span class="line-number">10</span><br><span class="line-number">11</span><br><span class="line-number">12</span><br></div></div><h3 id="兼容性" tabindex="-1"><a class="header-anchor" href="#兼容性" aria-hidden="true">#</a> 兼容性</h3><ul><li>兼容主流的 PC 浏览器，如 Chrome Firefox Safari Edge 等</li><li>暂不支持移动端编辑（支持移动端查看）</li><li><strong>不再支持 IE 浏览器</strong></li></ul><h3 id="交流" tabindex="-1"><a class="header-anchor" href="#交流" aria-hidden="true">#</a> 交流</h3><ul><li>加入 QQ 群 <code>681464059</code></li><li><a href="https://github.com/wangeditor-team/wangEditor-v5/issues" target="_blank" rel="noopener noreferrer">提交问题和建议<span><svg class="external-link-icon" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false" x="0px" y="0px" viewbox="0 0 100 100" width="15" height="15"><path fill="currentColor" d="M18.8,85.1h56l0,0c2.2,0,4-1.8,4-4v-32h-8v28h-48v-48h28v-8h-32l0,0c-2.2,0-4,1.8-4,4v56C14.8,83.3,16.6,85.1,18.8,85.1z"></path><polygon fill="currentColor" points="45.7,48.7 51.3,54.3 77.2,28.5 77.2,37.2 85.2,37.2 85.2,14.9 62.8,14.9 62.8,22.9 71.5,22.9"></polygon></svg><span class="external-link-icon-sr-only">open in new window</span></span></a></li></ul><!--]--></div><!--[--><div class="footer">Copyright © 2017-present wangeditor.com</div><!--]--></main><!--]--></div><!----><!--]--></div>
+    <script type="module" src="/assets/app.00cf3141.js" defer></script>
+  </body>
 </html>
